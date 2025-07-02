@@ -1,57 +1,60 @@
-const listContainer = document.querySelector("#list-items-container")
+// SORTING LOGIC
 const sortByDate = document.querySelector(".sort-date")
 const sortByTitle = document.querySelector(".sort-title")
 const sortByStatus = document.querySelector(".sort-status")
 
 sortByDate.addEventListener("click", (e) => {
-    let listItems = Array.from(document.querySelectorAll(".list-item")) //#1 get the list
+    let list = Array.from(document.querySelectorAll(".list-item")) //#1 get the list
     listContainer.innerHTML = ""
-    sortDates(listItems)
+    sortDates(list)
 
     if (sortByDate.dataset.direction === "asc") {
         sortByDate.dataset.direction = "des"
-        listItems.reverse()
+        list.reverse()
         sortByDate.setAttribute("src", "assets/arrow-downward.png")
     } else {
         sortByDate.dataset.direction = "asc"
         sortByDate.setAttribute("src", "assets/arrow-upward.png")
     }
 
-    listItems.forEach(item => listContainer.append(item))               //#4 put the sorted list back
+    list.forEach(item => listContainer.append(item))               //#4 put the sorted list back
 })
 
 sortByTitle.addEventListener("click", (e) => {
-    let listItems = Array.from(document.querySelectorAll(".list-item")) //#1 get the list
+    let list = Array.from(document.querySelectorAll(".list-item")) //#1 get the list
     listContainer.innerHTML = ""
-    sortTitles(listItems)                                   
+    list.forEach(item => console.log(item.querySelector(".article").textContent + "\n ==========="))
+    sortTitles(list)
+    list.forEach(item => console.log(item.querySelector(".article").textContent))
+
 
     if (sortByTitle.dataset.direction === "asc") {
         sortByTitle.dataset.direction = "des"
-        listItems.reverse()
+        list.reverse()
         sortByTitle.setAttribute("src", "assets/arrow-downward.png")
     } else {
         sortByTitle.dataset.direction = "asc"
         sortByTitle.setAttribute("src", "assets/arrow-upward.png")
     }
 
-    listItems.forEach(item => listContainer.append(item))               //#4 put the sorted list back
+    list.forEach(item => listContainer.append(item))               //#4 put the sorted list back
 })
 
 sortByStatus.addEventListener("click", (e) => {
-    let listItems = Array.from(document.querySelectorAll(".list-item")) //#1 get the list
+    let list = Array.from(document.querySelectorAll(".list-item")) //#1 get the list
     listContainer.innerHTML = ""
-    sortStatuses(listItems)
+    sortStatuses(list)
 
     if (sortByStatus.dataset.direction === "asc") {
-        sortByTitle.dataset.direction = "des"
-        listItems.reverse()
+        sortByStatus.dataset.direction = "des"
+        list.reverse()
         sortByStatus.setAttribute("src", "assets/arrow-downward.png")
     } else {
         sortByStatus.dataset.direction = "asc"
         sortByStatus.setAttribute("src", "assets/arrow-upward.png")
     }
 
-    listItems.forEach(item => listContainer.append(item))               //#4 put the sorted list back
+    list.forEach(item => listContainer.append(item))               //#4 put the sorted list back
 })
 
 const sortDates = (list) => { //bubble sort
@@ -105,11 +108,14 @@ const sortStatuses = (list) => {
     let unfinished = []
 
     list.forEach(item => {
-        if(item.querySelector(".finished"))
+        if (item.querySelector(".finished")) {
             finished.push(item)
-        else 
+        }
+        else if (item.querySelector(".unfinished"))
             unfinished.push(item)
+
     })
 
-    return finished.concat(unfinished)
+    finalArr = finished.concat(unfinished)
+    list.splice(0, list.length, ...finalArr)
 }

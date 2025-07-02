@@ -172,11 +172,11 @@ html {
     display: flex;
 }
 
-#duplicate-icon {
+.duplicate-icon {
     width: 23%;
 }
 
-#delete-icon {
+.delete-icon {
     width: 15%;
 }
 
