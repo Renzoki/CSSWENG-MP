@@ -1,0 +1,275 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #FCE7F6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.editor-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px 0;
+}
+
+.editor-interface {
+    display: flex;
+    width: calc(100% - 40px); /* Reduce total width to prevent overflow */
+    gap: 30px; /* Increased gap between toolbar and pages */
+    margin: 0 20px 20px; /* Add horizontal margin */
+    align-items: flex-start;
+}
+
+/* Toolbar Styles */
+.toolbar {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 280px; /* Increased width */
+    height: 580px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.toolbar-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px; /* Add if not already present */
+}
+
+.section-label {
+    font-weight: bold;
+    font-size: 15px;
+    color: #772B88;
+    margin-bottom: 8px;
+}
+
+.format-buttons {
+    display: flex;
+    gap: 8px;
+    
+    flex-wrap: wrap;
+}
+
+/* Large Toolbar Buttons */
+.format-btn {
+    width: 60px; /* Larger button size */
+    height: 60px;
+    padding: 0;
+    margin: 0;
+    background: transparent !important;
+    border: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.toolbar-icon {
+    width: auto !important;
+    height: auto !important;
+    max-width: 64px;
+    max-height: 64px;
+}
+
+/* Pages Container */
+.pages-container {
+    flex-grow: 1;
+    max-width: calc(100% - 350px); /* Increased from 300px to push right */
+    margin-left: 20px; /* Add left margin to shift entire container right */
+    padding-right: 30px; /* Increase right padding to extend scrollbar */
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    max-height: 700px;
+    overflow-y: auto;
+}
+
+/* Page Editor Styles */
+.page-with-handle {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 25px;
+}
+
+.page-editor {
+    background-color: white;
+    border-radius: 8px 0 0 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    min-height: 450px;
+    flex-grow: 1;
+    width: 100%;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #f9f9f9;
+    border-radius: 8px 0 0 0;
+}
+
+.page-title {
+    flex-grow: 1;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 6px;
+    border: 1px solid transparent;
+    margin: 0 10px;
+}
+
+.page-content {
+    flex-grow: 1;
+    padding: 25px;
+    min-height: 200px;
+    outline: none;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* Drag Handle */
+.drag-handle {
+    cursor: grab;
+    width: 24px;
+    background: transparent !important; /* Fully transparent */
+    border: none !important;           /* No border */
+    color: #999;                      /* Line color */
+    font-size: 18px;                  /* Adjust size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    padding: 0;
+    margin: 0;
+}
+
+.drag-icon {
+    width: 24px;
+    height: 24px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.drag-handle:hover {
+    color: #555; /* Darker lines on hover */
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.drag-ghost {
+    opacity: 0.8;
+}
+
+/* Add Page Button */
+.add-page-container {
+    width: calc(100% - 350px); /* Match pages-container width */
+    margin-left: 350px; /* Align with adjusted layout */
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.add-page-btn {
+    padding: 12px 24px;
+    cursor: pointer;
+    color: #772B88;
+    font-size: 15px;
+    border: 1px dashed #ccc;
+    border-radius: 6px;
+    background: #E09CDC;
+    font-weight: bold;
+}
+
+.add-page-btn:hover {
+    color: #333;
+    border-color: #DC87D6;
+    background-color: #DC87D6;
+}
+
+/* Action Buttons */
+.action-buttons {
+     width: calc(100% - 350px); /* Match pages-container width */
+    margin-left: 350px; /* Align with adjusted layout */
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 20px;
+}
+
+.action-button {
+    padding: 10px 20px;
+    margin-left: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.draft {
+    background-color: #FCE7F6;
+    color: #772B88;
+    border: 1px solid #999; 
+}
+
+.draft:hover {
+    background-color: #e0e0e0;
+}
+
+.post {
+    background-color: #5D176C;
+    color: #FCE7F6;
+}
+
+.post:hover {
+    background-color: #3e8e41;
+}
+
+/* For WebKit browsers (Chrome, Safari, Edge) */
+.pages-container::-webkit-scrollbar {
+    width: 10px; /* Thinner scrollbar */
+}
+
+.pages-container::-webkit-scrollbar-track {
+    background: #FCE7F6; /* Matches your body background */
+    border-radius: 10px;
+}
+
+.pages-container::-webkit-scrollbar-thumb {
+    background: #A45DB4; /* Purple thumb matching your theme */
+    border-radius: 10px;
+    border: 2px solid #FCE7F6; /* Blends with background */
+}
+
+.pages-container::-webkit-scrollbar-thumb:hover {
+    background: #772B88; /* Darker purple on hover */
+}
+
+/* For Firefox */
+.pages-container {
+    scrollbar-width: thin; /* "auto" or "thin" */
+    scrollbar-color: #A45DB4 #FCE7F6; /* thumb and track */
+}
+
+.undo-redo-buttons {
+    display: flex;
+    gap: 8px; /* Same gap as your other toolbar buttons */
+    margin-bottom: 12px; /* Space before the Text section label */
+}
