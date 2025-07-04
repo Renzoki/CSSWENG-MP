@@ -1,18 +1,37 @@
 const form = document.querySelector("#forms")
 
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
     const email = form.email.value
     const password = form.password.value
 
-    if(email < 11){ //If the length of the submitted email is too short
-        e.preventDefault();
-        alert("Email must be atleast 11 characters long");
+    if(email.length < 11){ //If the length of the submitted email is too short
+        alert("Email must be at least 11 characters long");
         return;
+    }
+    if(!password){ //If password doesnt exist       
+       alert("Password required!");
+       return;
     }  
 
-    //TODO: API call to server (wala pang route for this)
-    if(password){
-        console.log("Password is provided, ready for API call")
+    try{
+        const response = await fetch("/login", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ email, password})
+        });
+
+        const data = await response.json();
+
+        if(response.ok) {
+            alert(data.message);
+        }else
+            alert(data.message);
+
+    }catch (error) {
+        console.error(error);
+        alert("Error!")
     }
+
 })
