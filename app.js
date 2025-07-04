@@ -14,6 +14,15 @@ app.get("/", (req, res) => {
     res.render("login")
 })
 
+app.get("/forgot", (req, res) => {
+    res.render("forgot")
+})
+
+app.get("/drafts", (req, res) => {
+    res.render("drafts")
+})
+
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
 })
+
