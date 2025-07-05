@@ -10,6 +10,33 @@ body {
     min-height: 100vh;
 }
 
+/* Back Button Styles */
+.back-button-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+}
+
+.back-button {
+    display: inline-block;
+    padding: 8px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: background-color 0.2s;
+}
+
+.back-button:hover {
+    background-color: #f0f0f0;
+}
+
+.back-icon {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
 .editor-wrapper {
     display: flex;
     flex-direction: column;
@@ -92,7 +119,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 25px;
-    max-height: 700px;
+    max-height: 620px;
     overflow-y: auto;
 }
 
@@ -272,4 +299,128 @@ body {
     display: flex;
     gap: 8px; /* Same gap as your other toolbar buttons */
     margin-bottom: 12px; /* Space before the Text section label */
+}
+
+/* Add these styles to your create-page.css file */
+
+/* Permanent Page Styles */
+.permanent-page {
+    position: relative;
+}
+
+.permanent-page .hidden-handle {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #f9f9f9;
+    border-radius: 8px 0 0 0;
+}
+
+.page-title {
+    flex-grow: 1;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 6px;
+    border: 1px solid transparent;
+    margin: 0 10px;
+    background: transparent;
+    outline: none;
+}
+
+.page-title:focus {
+    border: 1px solid #A45DB4;
+    border-radius: 4px;
+}
+
+/* Update the drag handle selector to exclude hidden handles */
+.drag-handle:not(.hidden-handle) {
+    cursor: grab;
+    width: 24px;
+    background: transparent !important;
+    border: none !important;
+    color: #999;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Title & Author Section Styles */
+.title-author-container {
+    padding: 25px;
+    background-color: white;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.editable-title, .editable-author {
+    min-height: 30px;
+    padding: 8px;
+    outline: none;
+    border-bottom: 2px solid #A45DB4;
+    margin-bottom: 20px;
+}
+
+.editable-title {
+    font-size: 28px; /* Larger font for title */
+    font-weight: bold;
+    border-bottom-width: 3px;
+}
+
+.editable-author {
+    font-size: 16px;
+}
+
+/* Placeholder styling */
+.editable-title[data-placeholder]:empty:not(:focus):before,
+.editable-author[data-placeholder]:empty:not(:focus):before {
+    content: attr(data-placeholder);
+    color: #999;
+    display: inline-block;
+}
+
+/* Add these styles to your create-page.css file */
+
+/* Add Page Button Container */
+.add-page-btn-container {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    margin-top: -15px; /* Pull up slightly to be closer to the page above */
+}
+
+.add-page-btn {
+    padding: 8px 16px;
+    cursor: pointer;
+    color: #772B88;
+    font-size: 14px;
+    border: 1px dashed #ccc;
+    border-radius: 6px;
+    background: #E09CDC;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.add-page-btn:hover {
+    color: #333;
+    border-color: #DC87D6;
+    background-color: #DC87D6;
+}
+
+/* Remove the old add-page-container styles */
+.add-page-container {
+    display: none !important;
+}
+
+/* Adjust the pages container to accommodate the add buttons */
+.pages-container {
+    gap: 5px; /* Reduced gap since we have the add buttons now */
 }
