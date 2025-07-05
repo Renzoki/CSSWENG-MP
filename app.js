@@ -2,8 +2,14 @@ const express = require("express")
 const app = express()
 const hbs = require("handlebars")
 const path = require('path')
+const authRoutes = require('./routes/authRoutes')
+const connectDB = require('./config/connect')
 
-const PORT = process.env.port || 3000
+
+const PORT = process.env.PORT || 3000
+
+//Connect to db
+connectDB();
 
 // Templates and Static Files
 app.set('view engine', 'ejs');
@@ -14,6 +20,14 @@ app.get("/", (req, res) => {
     res.render("login")
 })
 
+
+//Middleware
+app.use(express.json()) //used to parse data into a JSON
+
+
+//Routes
+app.use('/',authRoutes)
+
 app.get("/forgot", (req, res) => {
     res.render("forgot")
 })
@@ -21,6 +35,7 @@ app.get("/forgot", (req, res) => {
 app.get("/drafts", (req, res) => {
     res.render("drafts")
 })
+
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
