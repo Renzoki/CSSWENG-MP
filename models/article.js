@@ -1,0 +1,16 @@
+const mongoose = require('mongoose');
+
+const blockSchema  = new mongoose.Schema({
+    type: {type: String, required: true}, //image,text or etc
+    content: {type: mongoose.Schema.Types.Mixed, required: true}
+});
+
+const articleSchema = new mongoose.Schema({
+    title: {type: String, required: true}, 
+    author: {type: String},
+    status: {type: String, required: true, enum: ['posted','unfinished','finished']}, //status types not final
+    creation_date: {type: Date, default: Date.now},
+    publish_date: {type: Date, required: true},
+    blocks: [blockSchema], //array of blocks
+
+});
