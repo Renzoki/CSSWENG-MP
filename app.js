@@ -3,6 +3,7 @@ const app = express()
 const hbs = require("handlebars")
 const path = require('path')
 const authRoutes = require('./routes/authRoutes')
+const articleRoutes = require('./routes/articleRoutes')
 const connectDB = require('./config/connect')
 
 
@@ -27,6 +28,7 @@ app.use(express.json()) //used to parse data into a JSON
 
 //Routes
 app.use('/',authRoutes)
+app.use('/articles',articleRoutes)
 
 app.get("/forgot", (req, res) => {
     res.render("forgot")

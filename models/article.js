@@ -8,9 +8,11 @@ const blockSchema  = new mongoose.Schema({
 const articleSchema = new mongoose.Schema({
     title: {type: String, required: true}, 
     author: {type: String},
-    status: {type: String, required: true, enum: ['posted','unfinished','finished']}, //status types not final
+    status: {type: String, required: true, enum: ['posted','unfinished','finished']},
     creation_date: {type: Date, default: Date.now},
     publish_date: {type: Date, required: true},
     blocks: [blockSchema], //array of blocks
 
 });
+
+module.exports = mongoose.model('Article', articleSchema);
