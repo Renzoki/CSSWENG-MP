@@ -26,6 +26,7 @@ form.addEventListener("submit", async (e) => {
 
         if(response.ok) {
             alert(data.message);
+            window.location.href = data.redirect;
         }else
             alert(data.message);
 

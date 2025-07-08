@@ -1,7 +1,7 @@
 const User = require('../models/user')
 
 
-//TODO: Login logic
+
 exports.login = async (req,res) => {
     const { email, password} = req.body;
     try{
@@ -16,7 +16,7 @@ exports.login = async (req,res) => {
         if(!isEqual){
             return res.status(401).json({ message: "Incorrect password!"})
         }else{
-            return res.status(200).json({ message: "Login successful!", redirect: "drafts" }) 
+            return res.status(200).json({ message: "Login successful!", redirect: "/drafts" }) 
         }
     
     }catch (error){
