@@ -31,7 +31,34 @@ exports.createArticle = async (req,res) =>{
 
 //TODO: update article on the db, 
 exports.updateArticle = async (req,res) =>{
+    try{
+        const { id } = req.params;
+        const updateData = req.body;
+
+        if(updateData.status){
+            const validStatuses = ['posted', 'unfinished', 'finished'];
+             if(!validStatuses.includes(status)){
+                return res.status(400).json({message: 'Invalid Status Value.'});
+            }
+        }
     
+
+    const updateArticle = await Article.findByIdandUpdate(
+        id,
+        {$set: updateData},
+        {new: true, runValidators: true}
+    );
+
+    if (!updateArticle){
+        return res.status(404).json({message: 'Article not found.'});
+    }
+
+    return res.status(200).json(updateArticle);
+    } catch(err){
+        console.error('Error updating Articles:', err);
+        return res.status(500).json({message: 'Server error while updating article.'});
+    }
+
 }
 
 //TODO: delete article
