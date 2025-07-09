@@ -9,7 +9,7 @@ const connectDB = require('./config/connect')
 const PORT = process.env.PORT || 3000
 
 //Connect to db
-connectDB();
+// connectDB();
 
 // Templates and Static Files
 app.set('view engine', 'ejs');
@@ -34,6 +34,14 @@ app.get("/forgot", (req, res) => {
 
 app.get("/drafts", (req, res) => {
     res.render("drafts")
+})
+
+app.get("/view", (req, res) => {
+    res.render("/views")
+})
+
+app.get("/users", (req, res) => {
+    res.render("users")
 })
 
 
