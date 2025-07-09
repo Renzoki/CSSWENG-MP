@@ -2,14 +2,15 @@ const listContainer = document.querySelector("#list-items-container")
 const searchBar = document.querySelector("#search-bar")
 
 searchBar.value = ""
-let copyOfList
+let currentArticles = [];
 
 //FETCH ARTICLES FROM DATABASE
 const fetchArticles = async() => {
     try{
         const response = await fetch('/articles');
         const articles = await response.json();
-        renderArticles(articles);
+        currentArticles = articles;
+        renderArticles(currentArticles);
     }catch(err){
         console.error("Failed to fetch articles: " ,err);
     }
@@ -22,11 +23,14 @@ const renderArticles = (articles) => {
         const item = document.createElement("div");
         item.className = "list-item";
 
+        item.dataset.title = article.title;
+        item.dataset.creationDate = article.creation_date;
+
         const formattedDate = article.publish_date //To truncate extra info
             ? new Date(article.publish_date).toLocaleDateString("en-US")
             : "N/A";
 
-        const statusClass = article.status === "finished" ? "finished" : "unfinished";
+        const statusClass = article.status;
 
         item.innerHTML = `
             <div class="date cell date-item"">${formattedDate|| 'N/A'}</div>
@@ -86,56 +90,61 @@ const searchArticles = (query) => {
     return queriedItems
 }
 
-listContainer.addEventListener("click", (e) => {
-    if (e.target.className.includes("duplicate-icon")) {
-        if (listContainer.dataset.version === "original") { //copy to copyList while duplicating in original
-            copyOfList = Array.from(listContainer.children).map(child => child.cloneNode(true));
-        } else if (listContainer.dataset.version === "copy") { //copy to original while duplicating during search
-            console.log(copyOfList)
-            duplicateItem(e.target.parentNode.parentNode, "copy")
-            console.log(copyOfList)
+//CLICK HANDLER
+listContainer.addEventListener("click", async (e) => {
+    const item = e.target.closest(".list-item");
+    if (!item) return;
 
+    const title = item.dataset.title;
+    const creation_date = item.dataset.creationDate;
+
+    //DELETE
+    if (e.target.className.includes("delete-icon")) {
+        try{
+            const response = await fetch('/articles/delete',{
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ title,creation_date})
+            });
+
+            const result = await response.json();
+            alert(result.message);
+            fetchArticles()
+        }catch (err){
+            console.error("Delete failed: ",err);
         }
     }
 
-    if (e.target.className.includes("delete-icon")) {
-        if (listContainer.dataset.version === "original") {
-            copyOfList = Array.from(listContainer.children).map(child => child.cloneNode(true));
+    //DUPLICATE
+    if (e.target.classList.contains("duplicate-icon")) {
+    const original = currentArticles.find(a =>
+        a.title === title && a.creation_date === creation_date
+    );
+
+    if (original) {
+        const { _id, __v, creation_date, ...copyData } = original; //fields that shouldnt be copied
+        copyData.title = `Copy of ${original.title}`;
+
+            try {
+                const res = await fetch('/articles', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(copyData)
+                });
+
+                const result = await res.json();
+                
+                if(res.ok){
+                    alert("Successfully duplicated article!");
+                }
+
+                fetchArticles(); 
+            } catch (err) {
+                console.error("Failed to duplicate article:", err);
+            }
         }
     }
 })
-
-// DUPLICATE AND DELETE ITEMS LOGIC 
-listContainer.addEventListener("click", (e) => {
-    if (e.target.className.includes("duplicate-icon")) {
-        duplicateItem(e.target.parentNode.parentNode, "original")
-    }
-
-    if (e.target.className.includes("delete-icon")) {
-        deleteItem(e.target.parentNode.parentNode, "original")
-    }
-})
-
-const duplicateItem = (originalItem, version) => {
-    if (version === "original") {
-        const copyOfItem = originalItem.cloneNode(true)
-        let title = copyOfItem.querySelector(".article")
-        title.textContent = `Copy of ${title.textContent.trim()}`
-        listContainer.insertBefore(copyOfItem, originalItem)
-    } else if (version === "copy") {
-        const copyOfItem = originalItem.cloneNode(true)
-        let title = copyOfItem.querySelector(".article")
-        title.textContent = `Copy of ${title.textContent}`
-        copyOfList.splice(copyOfList.indexOf(originalItem) + 1, 0, copyOfItem)
-    }
-}
-
-const deleteItem = (item, version) => {
-    if (version === "original")
-        listContainer.removeChild(item)
-    else if (version === "copy")
-        copyOfList.removeChild(item)
-}
 
 //Fetch articles listener
 document.addEventListener("DOMContentLoaded", fetchArticles); 
