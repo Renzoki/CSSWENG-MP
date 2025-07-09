@@ -22,6 +22,10 @@ app.get("/drafts", (req, res) => {
     res.render("drafts")
 })
 
+app.get("/post", (req, res) => {
+  res.render("post");
+});
+
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
 })
