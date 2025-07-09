@@ -31,7 +31,7 @@ exports.createArticle = async (req,res) =>{
 
 //TODO: update article on the db, 
 exports.updateArticle = async (req,res) =>{
-    return res.status(404)
+    
 }
 
 //TODO: delete article
