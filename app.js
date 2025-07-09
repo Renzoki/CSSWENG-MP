@@ -26,6 +26,10 @@ app.get("/post", (req, res) => {
   res.render("post");
 });
 
+app.get('/view', (req, res) => {
+  res.render('view');
+});
+
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
 })
