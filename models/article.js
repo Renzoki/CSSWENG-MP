@@ -10,7 +10,7 @@ const articleSchema = new mongoose.Schema({
     author: {type: String},
     status: {type: String, required: true, enum: ['posted','unfinished','finished']},
     creation_date: {type: Date, default: Date.now, required: true},
-    publish_date: {type: Date},
+    publish_date: {type: Date , default: null},
     blocks: [blockSchema], //array of blocks
 
 });

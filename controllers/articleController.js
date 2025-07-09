@@ -5,7 +5,7 @@ exports.createArticle = async (req,res) =>{
    try{
     const { title, author, status, publish_date, blocks} = req.body;
 
-    if(!title || !status || !publish_Date || !blocks){
+    if(!title || !status || !publish_date || !blocks){
         return res.status(400).json({message: 'Missing required fields'});
     }
     
@@ -17,6 +17,7 @@ exports.createArticle = async (req,res) =>{
     const newArticle = new Article({
         title,
         author,
+        status,
         publish_date,
         blocks
     });
@@ -61,9 +62,21 @@ exports.updateArticle = async (req,res) =>{
 
 }
 
-//TODO: delete article
+//deletes article
 exports.deleteArticle = async (req, res) =>{
-    return res.status(404)
+    const {title,creation_date} = req.body
+    try{
+        const match = await Article.findOneAndDelete({title,creation_date})
+
+        if(!match){
+            return res.status(404).json({message: "Article not found!"});
+        }
+
+        return res.status(200).json({message: "Successfully deleted article!"});
+    }catch (err){
+        return res.error("Error deleting article: ",err);
+
+    }
 }
 
 //returns all articles
