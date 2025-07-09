@@ -1,6 +1,6 @@
 const Article = require('../models/article')
 
-//TODO: creates an article on the database, for drafts page
+// creates an article on the database
 exports.createArticle = async (req,res) =>{
    try{
     const { title, author, status, publish_date, blocks} = req.body;
@@ -29,7 +29,7 @@ exports.createArticle = async (req,res) =>{
    } 
 };
 
-//TODO: update article on the db, 
+// update article on the db 
 exports.updateArticle = async (req,res) =>{
     try{
         const { id } = req.params;
@@ -66,9 +66,15 @@ exports.deleteArticle = async (req, res) =>{
     return res.status(404)
 }
 
-//TODO: returns all articles, this would be for the drafts function
+//returns all articles
 exports.getAllArticles = async (req,res) =>{
-    return res.status(404)
+    try{
+        const articles =  await Article.find();
+        res.status(200).json(articles);
+    }catch (err){
+        console.error(err);
+        res.status(500)
+    }
 }
 
 //TODO: get the content of a specific article, for uploading/editing
