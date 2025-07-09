@@ -17,7 +17,13 @@ exports.deleteArticle = async (req, res) =>{
 
 //TODO: returns all articles, this would be for the drafts function
 exports.getAllArticles = async (req,res) =>{
-    return res.status(404)
+    try{
+        const articles =  await Article.find();
+        res.status(200).json(articles);
+    }catch (err){
+        console.error(err);
+        res.status(500)
+    }
 }
 
 //TODO: get the content of a specific article, for uploading/editing
