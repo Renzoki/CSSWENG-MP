@@ -36,20 +36,23 @@
                 <div id="column-name-container">
                     <div class="date cell title">
                         Date
-                        <img class="sort-date sort-icon clickable" data-direction="asc" src="assets/arrow-upward.png" alt="">
+                        <img class="sort-date sort-icon clickable" data-direction="asc" src="assets/arrow-upward.png"
+                            alt="">
                     </div>
                     <div class="article cell title">
                         Article Title
-                        <img class="sort-title sort-icon clickable" data-direction="asc" src="assets/arrow-upward.png" alt="">
+                        <img class="sort-title sort-icon clickable" data-direction="asc" src="assets/arrow-upward.png"
+                            alt="">
                     </div>
                     <div class="status cell title">
                         Status
-                        <img class="sort-status sort-icon clickable" data-direction="asc" src="assets/arrow-upward.png" alt="">
+                        <img class="sort-status sort-icon clickable" data-direction="asc" src="assets/arrow-upward.png"
+                            alt="">
                     </div>
                     <div class="spacing-div cell title">
 
                     </div>
-                </div>  
+                </div>
                 <div id="list-items-container" data-version="original">
                     <div class="list-item">
                         <div class="date cell date-item">
@@ -115,7 +118,7 @@
                         <div class="date cell date-item">
                             10/10/2021
                         </div>
-                        <div class="article cell date-item">Water</div>
+                        <div class="article cell article-item">Water</div>
                         <div class="status cell">
                             <div class="status-info unfinished">
                                 Unfinished
@@ -127,6 +130,16 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-overlay" class="hidden">
+        <div id="modal">
+            <h2 id="confirmation-message">Do you want to <span id="action-container-span"></span> "<span id="article-title-span"></span>"?</h2>
+            <div id="confirmation-buttons-container">
+                <button id="confirmation-yes" class="clickable modal-action yes">Yes</button>
+                <button id="confirmation-no" class="clickable modal-action no">No</button>
             </div>
         </div>
     </div>
