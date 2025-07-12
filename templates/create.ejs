@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complete Editor with Right-Side Drag</title>
-    <link rel="stylesheet" href="create-page.css">
+    <link rel="stylesheet" href="css/create.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="js/create.js" defer></script>
 </head>
 <body>
     <div class="editor-wrapper">
@@ -16,23 +17,23 @@
                 <div class="toolbar-section">
                     <div class="undo-redo-buttons">
                         <button class="format-btn" title="Undo" onclick="document.execCommand('undo', false, null);">
-                            <img src="undo-icon.png" alt="Undo" class="toolbar-icon">
+                            <img src="assets/undo-icon.png" alt="Undo" class="toolbar-icon">
                         </button>
                         <button class="format-btn" title="Redo" onclick="document.execCommand('redo', false, null);">
-                            <img src="redo-icon.png" alt="Redo" class="toolbar-icon">
+                            <img src="assets/redo-icon.png" alt="Redo" class="toolbar-icon">
                         </button>
                     </div>
                     <div class="section-label">Text</div>
                     
                     <div class="format-buttons">
                         <button class="format-btn" title="Bold" onclick="document.execCommand('bold', false, null);">
-                            <img src="bold.png" alt="Bold" class="toolbar-icon">
+                            <img src="assets/bold.png" alt="Bold" class="toolbar-icon">
                         </button>
                         <button class="format-btn" title="Italic" onclick="document.execCommand('italic', false, null);">
-                            <img src="italic.png" alt="Italic" class="toolbar-icon">
+                            <img src="assets/italic.png" alt="Italic" class="toolbar-icon">
                         </button>
                         <button class="format-btn" title="Underline" onclick="document.execCommand('underline', false, null);">
-                            <img src="underline.png" alt="Underline" class="toolbar-icon">
+                            <img src="assets/underline.png" alt="Underline" class="toolbar-icon">
                         </button>
                     </div>
                 </div>
@@ -42,16 +43,16 @@
                     <div class="section-label">Alignment</div>
                     <div class="format-buttons">
                         <button class="format-btn" title="Align Left" onclick="setTextAlign('left')">
-                            <img src="center-left.png" alt="Left" class="toolbar-icon">
+                            <img src="assets/center-left.png" alt="Left" class="toolbar-icon">
                         </button>
                         <button class="format-btn" title="Center" onclick="setTextAlign('center')">
-                            <img src="center-middle.png" alt="Center" class="toolbar-icon">
+                            <img src="assets/center-middle.png" alt="Center" class="toolbar-icon">
                         </button>
                         <button class="format-btn" title="Align Right" onclick="setTextAlign('right')">
-                            <img src="center-right.png" alt="Right" class="toolbar-icon">
+                            <img src="assets/center-right.png" alt="Right" class="toolbar-icon">
                         </button>
                         <button class="format-btn" title="Justify" onclick="setTextAlign('justify')">
-                            <img src="center-spaced.png" alt="Justify" class="toolbar-icon">
+                            <img src="assets/center-spaced.png" alt="Justify" class="toolbar-icon">
                         </button>
                     </div>
                 </div>
@@ -61,10 +62,10 @@
                     <div class="section-label">Insert</div>
                     <div class="format-buttons">
                         <button class="format-btn" title="Insert Image" onclick="insertImage()">
-                            <img src="image.png" alt="Image" class="toolbar-icon">
+                            <img src="assets/image.png" alt="Image" class="toolbar-icon">
                         </button>
                         <button class="format-btn" title="Insert Link" onclick="insertLink()">
-                            <img src="link.png" alt="Link" class="toolbar-icon">
+                            <img src="assets/link.png" alt="Link" class="toolbar-icon">
                         </button>
                     </div>
                 </div>
@@ -74,13 +75,13 @@
                     <div class="section-label">List</div>
                     <div class="format-buttons">
                         <button class="format-btn" title="Bullet List" onclick="document.execCommand('insertUnorderedList', false, null);">
-                            <img src="list-dotted.png" alt="Bullets" class="toolbar-icon">
+                            <img src="assets/list-dotted.png" alt="Bullets" class="toolbar-icon">
                         </button>
                         <button class="format-btn" title="Numbered List" onclick="document.execCommand('insertOrderedList', false, null);">
-                            <img src="list-numbered.png" alt="Numbers" class="toolbar-icon">
+                            <img src="assets/list-numbered.png" alt="Numbers" class="toolbar-icon">
                         </button>
                         <button class="format-btn" title="Checklist" onclick="insertChecklist()">
-                            <img src="list-mixed.png" alt="Checklist" class="toolbar-icon">
+                            <img src="assets/list-mixed.png" alt="Checklist" class="toolbar-icon">
                         </button>
                     </div>
                 </div>
@@ -102,7 +103,7 @@
         
         <!-- Add Page Button -->
         <div class="add-page-container">
-            <button class="add-page-btn" onclick="addNewPage()">+</button>
+            <button class="add-page-btn">+</button>
         </div>
         
         <!-- Action Buttons -->
@@ -111,44 +112,5 @@
             <button class="action-button post">Post</button>
         </div>
     </div>
-
-    <script>
-        let pageCount = 1;
-        
-        function addNewPage() {
-            pageCount++;
-            const pagesContainer = document.getElementById('pagesContainer');
-            const newPage = document.createElement('div');
-            newPage.className = 'page-with-handle';
-            newPage.innerHTML = `
-                <div class="page-editor">
-                    <div class="page-content" contenteditable="true">
-                        Start editing your new page here...
-                    </div>
-                </div>
-                <div class="drag-handle">☰</div>
-            `;
-            pagesContainer.appendChild(newPage);
-        }
-
-        // Initialize drag-and-drop
-        document.addEventListener('DOMContentLoaded', function() {
-            new Sortable(document.getElementById('pagesContainer'), {
-                handle: '.drag-handle',
-                animation: 150,
-                ghostClass: 'drag-ghost',
-                onStart: function() {
-                    document.querySelectorAll('.drag-handle').forEach(h => {
-                        h.style.color = '#555';
-                    });
-                },
-                onEnd: function() {
-                    document.querySelectorAll('.drag-handle').forEach(h => {
-                        h.style.color = '#999';
-                    });
-                }
-            });
-        });
-    </script>
 </body>
 </html>

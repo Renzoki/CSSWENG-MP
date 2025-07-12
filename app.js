@@ -11,7 +11,7 @@ app.set('views', path.join(__dirname, 'templates'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get("/", (req, res) => {
-    res.render("login")
+    res.render("create")
 })
 
 app.listen(PORT, () => {
