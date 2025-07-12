@@ -291,10 +291,12 @@ a {
 
 .yes {
     background-color: #52914E;
+    cursor: pointer;
 }
 
 .no {
     background-color: #CD3546;
+    cursor: pointer;
 }
 
 /* Utility to hide/show */
