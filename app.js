@@ -16,11 +16,6 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'templates'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get("/", (req, res) => {
-    res.render("create")
-})
-
-
 //Middleware
 app.use(express.json()) //used to parse data into a JSON
 
@@ -37,11 +32,15 @@ app.get("/drafts", (req, res) => {
 })
 
 app.get("/view", (req, res) => {
-    res.render("/views")
+    res.render("view")
 })
 
 app.get("/users", (req, res) => {
     res.render("users")
+})
+
+app.get("/create", (req, res) => {
+    res.render("create")
 })
 
 
