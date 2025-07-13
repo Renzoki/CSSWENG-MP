@@ -9,5 +9,6 @@ router.post('/', articleController.createArticle);
 router.put('/:id', articleController.updateArticle);
 router.delete('/delete',articleController.deleteArticle);
 
+
 module.exports = router;
 

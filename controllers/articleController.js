@@ -92,5 +92,22 @@ exports.getAllArticles = async (req,res) =>{
 
 //TODO: get the content of a specific article, for uploading/editing
 exports.getArticleById = async (req,res) =>{
-    return res.status(404)
+    try{
+        const{id} = req.params;
+          if(!id.match(/^[0-9a-fa-F]{24}$/)){
+        return res.status(400).json({message: 'Invalid article ID'});
+    }
+    
+
+    const article = await article.findById(id);
+
+    if(!article){
+        return res.status(404).json({message: 'Article not found.'}); 
+    }
+    return res.status(200).json(article); 
+}catch(err){
+    console.error('Error fetching article:', err);
+    return res.status(500).json({message: 'Server error while fetching article.'})
+}
+
 }
