@@ -14,4 +14,4 @@ const articleSchema = new mongoose.Schema({
   blocks: [blockSchema]
 });
 
-module.exports = mongoose.model('Article', articleSchema, 'articles_test');
+module.exports = mongoose.model('Article', articleSchema, 'articles');

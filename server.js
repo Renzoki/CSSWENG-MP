@@ -7,10 +7,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use('/articles', articleRoutes);
 
-// Connect to MongoDB Atlas
-mongoose.connect('mongodb://127.0.0.1:27017/littleflowers_test')
+mongoose.connect('mongodb+srv://admin1234:waxdQSCrfv135@littleflowers.e5ux44c.mongodb.net/littleflowers?retryWrites=true&w=majority&appName=LittleFlowers')
   .then(() => {
-    console.log('✅ Connected to MongoDB');
+    console.log('✅ Connected to MongoDB Atlas');
     app.listen(3000, () => {
       console.log('🚀 Server running at http://localhost:3000');
     });
