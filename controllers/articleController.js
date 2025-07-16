@@ -1,5 +1,5 @@
         const Article = require('../models/article')
-
+        const mongoose = require('mongoose');
         // creates an article on the database
         exports.createArticle = async (req,res) =>{
         try{
@@ -94,7 +94,7 @@
         exports.getArticleById = async (req,res) =>{
             try{
                 const{id} = req.params;
-                if(!id.match(/^[0-9a-fa-F]{24}$/)){
+                if(!mongoose.Types.ObjectId.isvalid(id)){
                 return res.status(400).json({message: 'Invalid article ID'});
             }
             
