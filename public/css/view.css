@@ -19,7 +19,7 @@ a {
 
 #navbar {
     background-color: white;
-    width: 8%;
+    width: 9%;
     height: 100%;
 
     min-width: 120px;
@@ -50,7 +50,7 @@ a {
     align-items: center;
 }
 
-#selected {
+.selected {
     background-color: #ffbcf7;
     color: #F1F0F0;
 }

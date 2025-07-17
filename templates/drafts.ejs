@@ -8,6 +8,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/drafts.css">
+    <script src="js/navbarLogic.js"></script>
     <script src="js/draft.js" defer></script>
     <script src="js/sortArticles.js" defer></script>
     <title>Draft Page</title>
@@ -15,38 +16,8 @@
 
 <body>
     <div id="container">
-        <div id="navbar">
-            <a href="">
-                <div id="navbar-logo-container" class="navbutton">
-                    <img id="navbar-logo" class="icon" src="assets/logo.png" alt="">
-                </div>
-            </a>
-            <a href="/drafts">
-                <div id="selected" class="navbutton">
-                    <img class="nav-icon" src="assets/folder-gray.png" alt="">
-                    <p class="nav-title">Drafts</p>
-                </div>
-            </a>
-            <a href="/view">
-                <div class="navbutton">
-                    <img class="nav-icon" src="assets/view-gray.png" alt="">
-                    <p class="nav-title">View</p>
-                </div>
-            </a>
-            <a href="/users">
-                <div class="navbutton">
-                    <img class="nav-icon" src="assets/user-gray.png" alt="">
-                    <p class="nav-title">Users</p>
-                </div>
-            </a>
-            <a href="/logout" id="logout-container">
-                <div class="navbutton">
-                    <img id="logout-icon" class="nav-icon" src="assets/logout-icon.png" alt="">
-                    <p class="nav-title">Log Out</p>
-                </div>
-            </a>
-        </div>
-        
+        <%- include('partials/navbar'); %>
+
         <div id="right-container">
             <div id="search-container">
                 <img id="search-icon" src="assets/search-gray.png" alt="">
