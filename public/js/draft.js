@@ -99,7 +99,8 @@ const duplicateItem = (originalItem) => {
 
 const deleteItem = (item) => {
     listContainer.removeChild(item)
-    copyOfList.splice(copyOfList.indexOf(item), 1)
+   
+    
 }
 
 // CHANGING STATUS LOGIC
