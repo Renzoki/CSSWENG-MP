@@ -3,6 +3,4 @@ document.addEventListener("DOMContentLoaded", () => {
   const currentSelected = document.querySelectorAll(`.${currentPath}`);
 
   currentSelected[0].querySelector(".navbutton").classList.add("selected")
-  console.log(currentPath)
-  console.log(currentSelected[0].querySelector(".navbutton"))
 });
