@@ -99,8 +99,9 @@ const duplicateItem = (originalItem) => {
 
 const deleteItem = (item) => {
     listContainer.removeChild(item)
-   
-    
+
+    if (listContainer.dataset.version === "copy")
+        copyOfList.splice(copyOfList.indexOf(item), 1)
 }
 
 // CHANGING STATUS LOGIC

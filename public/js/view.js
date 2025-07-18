@@ -1,6 +1,41 @@
 const listContainer = document.querySelector("#list-items-container")
 let copyOfList
 
+searchBar.addEventListener("input", (e) => {
+    if (searchBar.value) {
+        if (listContainer.dataset.version === "original") {
+            copyOfList = Array.from(listContainer.children).map(child => child.cloneNode(true));
+        }
+        listContainer.dataset.version = "copy"
+        listContainer.innerHTML = ""
+
+        const searchResult = searchArticles(searchBar.value)
+        searchResult.forEach(item => {
+            listContainer.append(item)
+        })
+
+    } else {
+        listContainer.dataset.version = "original"
+        listContainer.innerHTML = ""
+        copyOfList.forEach(item => {
+            listContainer.append(item)
+        })
+    }
+})
+
+const searchArticles = (query) => {
+    let queriedItems = []
+    query = query.toLowerCase()
+
+    copyOfList.forEach(article => {
+        title = article.querySelector(".article").textContent.toLowerCase()
+        if (title.includes(query)) {
+            queriedItems.push(article)
+        }
+    })
+
+    return queriedItems
+}
 
 // DUPLICATE, DELETE, and CONFIRMATION LOGIC
 const modalContainer = document.querySelector('#modal-overlay');
