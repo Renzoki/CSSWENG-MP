@@ -39,6 +39,10 @@ app.get("/users", (req, res) => {
     res.render("users")
 })
 
+app.get("/account", (req, res) => {
+    res.render("account")
+})
+
 app.get("/create", (req, res) => {
     res.render("create")
 })
