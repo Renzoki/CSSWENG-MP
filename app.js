@@ -4,6 +4,7 @@ const hbs = require("handlebars")
 const path = require('path')
 const authRoutes = require('./routes/authRoutes')
 const articleRoutes = require('./routes/articleRoutes')
+const authController = require('./controllers/authController')
 const connectDB = require('./config/connect')
 
 
@@ -23,7 +24,17 @@ app.get("/", (req, res) => {
 
 
 //Middleware
+const session = require('express-session')
+const MongoStore = require('connect-mongo')
 app.use(express.json()) //used to parse data into a JSON
+app.use(session({ //establishing a session
+    secret: process.env.SESSION_SECRET || 'defaultsecret',
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI}),
+    cookie: { maxAge: 1000 * 60 * 60 * 24 } //1 day cookie
+
+}))
 
 
 //Routes
@@ -34,7 +45,7 @@ app.get("/forgot", (req, res) => {
     res.render("forgot")
 })
 
-app.get("/drafts", (req, res) => {
+app.get("/drafts",authController.isAuthenticated, (req, res) => {
     res.render("drafts")
 })
 

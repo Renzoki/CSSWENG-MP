@@ -36,3 +36,14 @@ form.addEventListener("submit", async (e) => {
     }
 
 })
+
+window.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const message = params.get('message');
+
+    if (message) {
+        setTimeout(() => {
+            alert(message);
+        }, 500); //Waits 500ms for the window to be loaded
+    }
+});

@@ -16,6 +16,9 @@ exports.login = async (req,res) => {
         if(!isEqual){
             return res.status(401).json({ message: "Incorrect password!"})
         }else{
+            req.session.userId = user._id;
+            req.session.email = user.email;
+
             return res.status(200).json({ message: "Login successful!", redirect: "/drafts" }) 
         }
     
@@ -25,6 +28,26 @@ exports.login = async (req,res) => {
 
     }
 };
+
+exports.logout = (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error("Logout error: ", err);
+            return res.status(500).json({ message: "Logout failed" });
+        }
+        res.clearCookie('connect.sid');
+        return res.status(200).json({ message: "Logged out successfully", redirect: "/" });
+    });
+};
+
+exports.isAuthenticated = (req, res, next) => {
+    if (req.session.userId) {
+        return next();
+    } else {
+        return res.redirect('/?message=' + encodeURIComponent("Please log in first"));
+    }
+};
+
 
 exports.forgot_password = (req,res) => {
     res.send("Forgot password");
