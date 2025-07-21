@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const nodemailer = require('nodemailer')
 
 
 
@@ -49,6 +50,42 @@ exports.isAuthenticated = (req, res, next) => {
 };
 
 
-exports.forgot_password = (req,res) => {
-    res.send("Forgot password");
+exports.forgot_password = async (req,res) => {
+    const { email } = req.body;
+    try{
+        const user = await User.findOne({ email });
+
+        if(!user){
+            return res.status(404).json({ error: 'Email not found' });
+        }
+
+        const tempPassword = Math.random().toString(36).slice(-8) //random 8 characters
+        // console.log(tempPassword);
+        user.password = tempPassword;
+        await user.save()
+        // console.log("Passowrd after saviung", user.password)
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
+        });
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Your Temporary Password',
+            text: `Here is your temporary password: ${tempPassword}. Please log in and change it immediately.`
+        }
+
+        await transporter.sendMail(mailOptions);
+        res.json({ message: 'Temporary password sent to email.' });
+
+    }catch(err){
+        console.error(err);
+        res.status(500).json({ error: 'Something went wrong' });
+
+    }
 };
