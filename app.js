@@ -35,6 +35,10 @@ app.get("/view", (req, res) => {
     res.render("view")
 })
 
+app.get("/published", (req, res) => {
+    res.render("published")
+})
+
 app.get("/users", (req, res) => {
     res.render("users")
 })
