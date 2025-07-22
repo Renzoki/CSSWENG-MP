@@ -63,27 +63,24 @@ popUpConfirmation()
 
 //DELETE AN EXISTING USER 
 listContainer.addEventListener("click", (e) => {
-    const yes = document.querySelector(".delete-yes")
-    const no = document.querySelector(".delete-no")
+    if (e.target = document.querySelector(".delete-icon")) {
+        const yes = document.querySelector(".delete-yes")
+        const no = document.querySelector(".delete-no")
 
-    modalContainerDel.classList.remove("hidden")
-    const item = e.target.parentNode.parentNode
-    const username = item.querySelector(".name-item").textContent
-    const usernameHolder = modalContainerDel.querySelector("#username-placeholder")
+        modalContainerDel.classList.remove("hidden")
+        const item = e.target.parentNode.parentNode
+        const username = item.querySelector(".name-item").textContent
+        const usernameHolder = modalContainerDel.querySelector("#username-placeholder")
 
-    usernameHolder.textContent = username
+        usernameHolder.textContent = username
 
-    modalContainerDel.addEventListener('click', w => {
-        if (w.target === yes) {
-            listContainer.removeChild(item)
-            //TODO: Insert delete logic here
-            modalContainerDel.classList.add('hidden');
-        } else if (w.target === no) {
-            modalContainerDel.classList.add('hidden');
-        }
-        else if (w.target === modalContainerDel) {
-            modalContainerDel.classList.add('hidden');
-        }
-    }, { once: true })
+        modalContainerDel.addEventListener('click', w => {
+            if (w.target === yes) {
+                listContainer.removeChild(item)
+                //TODO: Insert delete logic here
+                modalContainerDel.classList.add('hidden');
+            } 
+            modalContainerDel.classList.add('hidden'); //close the window regardless 
+        }, { once: true })
+    }
 })
-
