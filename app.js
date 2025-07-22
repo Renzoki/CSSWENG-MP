@@ -21,7 +21,7 @@ app.use(express.json()) //used to parse data into a JSON
 
 
 //Routes
-app.use('/',authRoutes)
+app.use('/', authRoutes)
 
 app.get("/forgot", (req, res) => {
     res.render("forgot")
