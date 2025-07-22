@@ -4,7 +4,7 @@ const router = express.Router();
 
 
 router.post('/login',authController.login);
-
+router.post('/logout', authController.logout);
 router.post('/forgot_password',authController.forgot_password);
 
 module.exports = router;
