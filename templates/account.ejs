@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/account.css">
+    <script src="js/navbarLogic.js" defer></script>
+    <script src="js/account.js" defer></script>
+    <title>Account Page</title>
+</head>
+
+<body>
+    <div id="container">
+        <%- include('partials/navbar'); %>
+
+            <div id="right-container">
+                <div class="right-container-container">
+                    <div class="title">
+                        Change Password
+                    </div>
+
+                    <div class="password-instructions">
+                        Strong password required. Enter 8-30 characters. Do not include common words or names. Combine
+                        uppercase letters, lowercase letters, numbers, and symbols.
+                    </div>
+
+                    <form action=""> <!-- TODO: Set route for changing password -->
+                        <div class="form-item">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" title="newPassword" name="newPassword"></input>
+                        </div>
+
+                        <div class="form-item">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" title="confirmPassword" name="confirmPassword"></input>
+                        </div>
+
+                        <button type="submit">Update Password</button>
+                        <p class="warning hidden">
+
+                        </p>
+                    </form>
+                </div>
+            </div>
+    </div>
+
+    <div id="modal-overlay" class="hidden">
+        <div id="modal">
+            <h2 id="confirmation-message">Are you sure you want to update your password?</h2>
+            <div id="confirmation-buttons-container">
+                <button id="confirmation-yes" class="modal-action yes">Yes</button>
+                <button id="confirmation-no" class="modal-action no">No</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

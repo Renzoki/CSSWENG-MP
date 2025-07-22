@@ -7,26 +7,19 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/drafts.css">
-    <script src="js/draftActions.js" defer></script>
-    <script src="js/draftSort.js" defer></script>
+    
+    <script src="js/navbarLogic.js" defer></script>
+    <script src="js/draft.js" defer></script>
+    <script src="js/sortArticles.js" defer></script>
     <title>Draft Page</title>
 </head>
 
 <body>
     <div id="container">
-        <div id="navbar">
-            <a href="">
-                <div id="selected" class="navbutton">
-                    <img class="icon" src="assets/folder-white.png" alt="">
-                </div>
-            </a>
-            <a href="">
-                <div class="navbutton">
-                    <img class="icon" src="assets/view-gray.png" alt="">
-                </div>
-            </a>
-        </div>
+        <%- include('partials/navbar'); %>
+
         <div id="right-container">
             <div id="search-container">
                 <img id="search-icon" src="assets/search-gray.png" alt="">
@@ -35,7 +28,7 @@
             <div id="list-container">
                 <div id="column-name-container">
                     <div class="date cell title">
-                        Date
+                        Date Created
                         <img class="sort-date sort-icon clickable" data-direction="asc" src="assets/arrow-upward.png"
                             alt="">
                     </div>
@@ -106,7 +99,7 @@
                         <div class="article cell article-item">Earth</div>
                         <div class="status cell status-item">
                             <div class="status-info unfinished">
-                                Uninished
+                                Unfinished
                             </div>
                         </div>
                         <div class="spacing-div cell">
@@ -131,15 +124,21 @@
                     </div>
                 </div>
             </div>
+            <div id="new-article-container">
+                <button id="add-new-article-button" class="clickable">
+                    Add Article
+                </button>
+            </div>
         </div>
     </div>
 
     <div id="modal-overlay" class="hidden">
         <div id="modal">
-            <h2 id="confirmation-message">Do you want to <span id="action-container-span"></span> "<span id="article-title-span"></span>"?</h2>
+            <h2 id="confirmation-message">Do you want to <span id="action-container-span"></span> "<span
+                    id="article-title-span"></span>"?</h2>
             <div id="confirmation-buttons-container">
-                <button id="confirmation-yes" class="clickable modal-action yes">Yes</button>
-                <button id="confirmation-no" class="clickable modal-action no">No</button>
+                <button id="confirmation-yes" class="modal-action yes">Yes</button>
+                <button id="confirmation-no" class="modal-action no">No</button>
             </div>
         </div>
     </div>
