@@ -1,6 +1,8 @@
 const listContainer = document.querySelector("#list-items-container")
 let copyOfList
 
+//SEARCH LOGIC
+const searchBar = document.querySelector("#search-bar")
 searchBar.addEventListener("input", (e) => {
     if (searchBar.value) {
         if (listContainer.dataset.version === "original") {
