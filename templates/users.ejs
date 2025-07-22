@@ -9,7 +9,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/users.css">
-    
+
     <script src="js/navbarLogic.js" defer></script>
     <script src="js/users.js" defer></script>
     <title>Users Page</title>
@@ -19,47 +19,47 @@
     <div id="container">
         <%- include('partials/navbar'); %>
 
-        <div id="right-container">
-            <div id="search-container">
-                <img id="search-icon" src="assets/search-gray.png" alt="">
-                <input id="search-bar" type="text" placeholder="Search for Articles...">
-            </div>
-            <div id="list-container">
-                <div id="column-name-container">
-                    <div class="date cell title">
-                        Date Created
-                    </div>
-                    <div class="account-name cell title">
-                        Account Email
-                    </div>
-                    <div class="spacing-div cell title">
-
-                    </div>
+            <div id="right-container">
+                <div id="search-container">
+                    <img id="search-icon" src="assets/search-gray.png" alt="">
+                    <input id="search-bar" type="text" placeholder="Search for Articles...">
                 </div>
-
-                <div id="list-items-container" data-version="original">
-                    <div class="list-item">
-                        <div class="date cell date-item">
-                            02/14/2004
+                <div id="list-container">
+                    <div id="column-name-container">
+                        <div class="date cell title">
+                            Date Created
                         </div>
-                        <div class="account-name cell name-item">@jonh_pork@dlsu.edu.ph</div>
-                        <div class="spacing-div cell">
-                            <img class="delete-icon clickable" src="assets/remove-icon.png">
+                        <div class="account-name cell title">
+                            Account Email
+                        </div>
+                        <div class="spacing-div cell title">
+
                         </div>
                     </div>
+
+                    <div id="list-items-container" data-version="original">
+                        <div class="list-item">
+                            <div class="date cell date-item">
+                                02/14/2004
+                            </div>
+                            <div class="account-name cell name-item">@jonh_pork@dlsu.edu.ph</div>
+                            <div class="spacing-div cell">
+                                <img class="delete-icon clickable" src="assets/remove-icon.png">
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
+                <div id="new-account-container">
+                    <button id="add-new-account-button" class="clickable">
+                        Add User
+                    </button>
+                </div>
             </div>
-
-            <div id="new-account-container">
-                <button id="add-new-account-button" class="clickable">
-                    Add User
-                </button>
-            </div>
-        </div>
     </div>
 
-    <div id="modal-overlay" class="hidden">
+    <div id="modal-overlay-add-user" class="hidden modal-overlay">
         <div id="modal">
             <h2 id="confirmation-message">Input the new user's email below:</h2>
             <form action="" id="add-user-forms"> <!-- TODO: Add route call here -->
@@ -68,6 +68,18 @@
             <div id="confirmation-buttons-container">
                 <button id="confirmation-yes" class="modal-action yes">Add User</button>
                 <button id="confirmation-no" class="modal-action no">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-overlay-delete-user" class="hidden modal-overlay">
+        <div id="modal">
+            <h2 id="confirmation-message">Are you sure you want to remove
+                "<span id="username-placeholder"></span>" as a user?
+            </h2>
+            <div id="confirmation-buttons-container">
+                <button id="confirmation-yes" class="modal-action yes delete-yes">Yes</button>
+                <button id="confirmation-no" class="modal-action no delee-no">No</button>
             </div>
         </div>
     </div>

@@ -1,32 +1,33 @@
 const forms = document.querySelector("#add-user-forms")
 const newUserButton = document.querySelector("#add-new-account-button")
-const modalContainer = document.querySelector("#modal-overlay")
+const modalContainerAdd = document.querySelector("#modal-overlay-add-user")
+const modalContainerDel = document.querySelector("#modal-overlay-delete-user")
 const listContainer = document.querySelector("#list-items-container")
 
 forms.addEventListener("submit", (e) => {
     e.preventDefault()
 })
 
+//ADD A NEW USER
 newUserButton.addEventListener("click", (e) => {
-    modalContainer.classList.remove('hidden');
+    modalContainerAdd.classList.remove('hidden');
 })
 
 const popUpConfirmation = () => {
     const yes = document.querySelector(".yes")
     const no = document.querySelector(".no")
 
-    modalContainer.addEventListener('click', w => {
+    modalContainerAdd.addEventListener('click', w => {
         if (w.target === yes) {
-            newUserElement = createUserElement("2/14/2005", forms.newUserEmail.value) 
+            newUserElement = createUserElement("2/14/2005", forms.newUserEmail.value)
             listContainer.append(newUserElement)
-            console.log("BLUE")
             //TODO: Insert submit logic here
-            modalContainer.classList.add('hidden');
+            modalContainerAdd.classList.add('hidden');
         } else if (w.target === no) {
-            modalContainer.classList.add('hidden');
+            modalContainerAdd.classList.add('hidden');
         }
-        else if (w.target === modalContainer) {
-            modalContainer.classList.add('hidden');
+        else if (w.target === modalContainerAdd) {
+            modalContainerAdd.classList.add('hidden');
         }
     })
 }
@@ -59,3 +60,30 @@ const createUserElement = (date, email) => {
 }
 
 popUpConfirmation()
+
+//DELETE AN EXISTING USER 
+listContainer.addEventListener("click", (e) => {
+    const yes = document.querySelector(".delete-yes")
+    const no = document.querySelector(".delete-no")
+
+    modalContainerDel.classList.remove("hidden")
+    const item = e.target.parentNode.parentNode
+    const username = item.querySelector(".name-item").textContent
+    const usernameHolder = modalContainerDel.querySelector("#username-placeholder")
+
+    usernameHolder.textContent = username
+
+    modalContainerDel.addEventListener('click', w => {
+        if (w.target === yes) {
+            listContainer.removeChild(item)
+            //TODO: Insert delete logic here
+            modalContainerDel.classList.add('hidden');
+        } else if (w.target === no) {
+            modalContainerDel.classList.add('hidden');
+        }
+        else if (w.target === modalContainerDel) {
+            modalContainerDel.classList.add('hidden');
+        }
+    }, { once: true })
+})
+

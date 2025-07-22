@@ -116,6 +116,21 @@
     transform: translateY(3px);
 }
 
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+
+    font-family: Inter;
+}
+
 #modal {
     background: white;
     padding: 1.5em;
@@ -145,36 +160,6 @@ input[type="email"] {
 
 #modal-close:hover {
     transform: translateY(1px);
-}
-
-.modal-action {
-    width: 20%;
-    height: 100%;
-    padding: .5em;
-    border: none;
-    border-radius: .5em;
-    color: white;
-    font-family: inherit;
-}
-
-#confirmation-buttons-container {
-    display: flex;
-    justify-content: space-evenly;
-}
-
-.yes {
-    background-color: #52914E;
-    cursor: pointer;
-}
-
-.no {
-    background-color: #CD3546;
-    cursor: pointer;
-}
-
-/* Utility to hide/show */
-.hidden {
-    visibility: hidden;
 }
 
 #new-account-container {
