@@ -2,7 +2,7 @@ const listContainer = document.querySelector("#list-items-container")
 let copyOfList
 
 //SEARCH LOGIC
-const searchBar = document.querySelector("#search-bar")
+const searchBar = document.querySelector("#search-bar") //Same logis as drafts
 searchBar.addEventListener("input", (e) => {
     if (searchBar.value) {
         if (listContainer.dataset.version === "original") {

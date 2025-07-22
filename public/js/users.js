@@ -13,13 +13,14 @@ newUserButton.addEventListener("click", (e) => {
     modalContainerAdd.classList.remove('hidden');
 })
 
-const popUpConfirmation = () => {
+//This functions adds an event listener to the yes and no confirmation buttons for adding a new user
+const popUpConfirmation = () => { 
     const yes = document.querySelector(".yes")
     const no = document.querySelector(".no")
 
     modalContainerAdd.addEventListener('click', w => {
         if (w.target === yes) {
-            newUserElement = createUserElement("2/14/2005", forms.newUserEmail.value)
+            newUserElement = createUserElement("2/14/2005", forms.newUserEmail.value) //Creaetes a new user (Only in frontend)
             listContainer.append(newUserElement)
             //TODO: Insert submit logic here
             modalContainerAdd.classList.add('hidden');
@@ -76,7 +77,7 @@ listContainer.addEventListener("click", (e) => {
 
         modalContainerDel.addEventListener('click', w => {
             if (w.target === yes) {
-                listContainer.removeChild(item)
+                listContainer.removeChild(item) //Remove User (frontend only)
                 //TODO: Insert delete logic here
                 modalContainerDel.classList.add('hidden');
             } 
