@@ -11,7 +11,7 @@ const connectDB = require('./config/connect')
 const PORT = process.env.PORT || 3000
 
 //Connect to db
-// connectDB();
+connectDB();
 
 // Templates and Static Files
 app.set('view engine', 'ejs');
