@@ -11,17 +11,12 @@ const connectDB = require('./config/connect')
 const PORT = process.env.PORT || 3000
 
 //Connect to db
-connectDB();
+// connectDB();
 
 // Templates and Static Files
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'templates'));
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.get("/", (req, res) => {
-    res.render("login")
-})
-
 
 //Middleware
 const session = require('express-session')
@@ -48,6 +43,35 @@ app.get("/forgot", (req, res) => {
 app.get("/drafts",authController.isAuthenticated, (req, res) => {
     res.render("drafts")
 })
+
+app.get("/view", (req, res) => {
+    res.render("view")
+})
+
+app.get("/published", (req, res) => {
+    res.render("published")
+})
+
+app.get("/users", (req, res) => {
+    res.render("users")
+})
+
+app.get("/account", (req, res) => {
+    res.render("account")
+})
+
+app.get("/create", (req, res) => {
+    res.render("create")
+})
+
+
+app.get("/post", (req, res) => {
+  res.render("post");
+});
+
+app.get("/view", (req, res) => {
+  res.render("view");
+});
 
 
 app.listen(PORT, () => {

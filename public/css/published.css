@@ -80,37 +80,22 @@
 }
 
 .article {
-    width: 50%;
+    width: 55%;
 }
 
-.spacing-div {
-    width: 15%;
-    display: flex;
-    justify-content: space-evenly;
-}
-
-.status {
-    width: 20%;
-}
-
-.status-info {
-    width: 50%;
-    height: 50%;
-    border-radius: .4em;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: .8em;
+.article-item {
     cursor: pointer;
 }
 
-.unfinished {
-    background-color: #CD3546;
+.status {
+    width: 15%;
 }
 
-.finished {
-    background-color: #52914E;
+.spacing-div {
+    width: 21.5%;
+    display: flex;
+    justify-content: space-evenly;
+    max-width: 200px;
 }
 
 #list-items-container {
@@ -124,10 +109,17 @@
     height: 15%;
     border-bottom: 1px solid rgb(142, 142, 142);
     display: flex;
+    color: #464A52;
 }
 
-.duplicate-icon {
-    width: 2.3em;
+.archive-icon {
+    width: 2.1em;
+}
+
+.edit-icon {
+    width: 1.9em;
+    margin-left: .2em;
+    margin-bottom: .1em;
 }
 
 .delete-icon {
@@ -143,70 +135,11 @@
     transform: translateY(3px);
 }
 
-
-
-#modal {
-    background: white;
-    padding: 1.5em;
-    border-radius: 0.5em;
-    max-width: 90%;
-    width: 400px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-#confirmation-message {
-    text-align: center;
-}
-
-#modal-close:hover {
-    transform: translateY(1px);
-}
-
-.modal-action {
-    width: 20%;
-    height: 100%;
-    padding: .5em;
-    border: none;
-    border-radius: .5em;
-    color: white;
-    font-family: inherit;
-}
-
-#confirmation-buttons-container {
-    display: flex;
-    justify-content: space-evenly;
-}
-
-.yes {
-    background-color: #52914E;
-    cursor: pointer;
-}
-
-.no {
-    background-color: #CD3546;
-    cursor: pointer;
-}
-
-/* Utility to hide/show */
-.hidden {
-    visibility: hidden;
-}
-
 #new-article-container {
     width: 80%;
-    display: flex;
-    justify-content: flex-end;
 }
 
 #add-new-article-button {
-    width: 15%;
     height: 150%;
-    border: 1px solid #464A52;
-    border-radius: .5em;
-    box-shadow: none;
-    background-color: white;
-    font-family: Inter;
+    opacity: 0;
 }

@@ -8,12 +8,12 @@
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/drafts.css">
+    <link rel="stylesheet" href="css/published.css">
     
     <script src="js/navbarLogic.js" defer></script>
-    <script src="js/draft.js" defer></script>
+    <script src="js/published.js" defer></script>
     <script src="js/sortArticles.js" defer></script>
-    <title>Draft Page</title>
+    <title>Published Page</title>
 </head>
 
 <body>
@@ -28,7 +28,7 @@
             <div id="list-container">
                 <div id="column-name-container">
                     <div class="date cell title">
-                        Date Created
+                        Date Posted
                         <img class="sort-date sort-icon clickable" data-direction="asc" src="assets/arrow-upward.png"
                             alt="">
                     </div>
@@ -38,15 +38,42 @@
                             alt="">
                     </div>
                     <div class="status cell title">
-                        Status
-                        <img class="sort-status sort-icon clickable" data-direction="asc" src="assets/arrow-upward.png"
-                            alt="">
+
                     </div>
                     <div class="spacing-div cell title">
 
                     </div>
-                </div>  
-                <div id="list-items-container" data-version="original"></div>
+                </div>
+                <div id="list-items-container" data-version="original">
+                    <div class="list-item">
+                        <div class="date cell date-item">
+                            02/14/2004
+                        </div>
+                        <div class="article cell article-item">Fire</div>
+                        <div class="status cell status-item">
+                            
+                        </div>
+                        <div class="spacing-div cell">
+                            <img class="archive-icon clickable" src="assets/archive-icon.png" alt="">
+                            <img class="edit-icon clickable" src="assets/edit-icon.png" alt="">
+                            <img class="delete-icon clickable" src="assets/delete-draft.png" alt="">
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <div class="date cell date-item">
+                            03/15/2003
+                        </div>
+                        <div class="article cell article-item">Water</div>
+                        <div class="status cell status-item">
+                            
+                        </div>
+                        <div class="spacing-div cell">
+                            <img class="archive-icon clickable" src="assets/archive-icon.png" alt="">
+                            <img class="edit-icon clickable" src="assets/edit-icon.png" alt="">
+                            <img class="delete-icon clickable" src="assets/delete-draft.png" alt="">
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="new-article-container">
                 <button id="add-new-article-button" class="clickable">
