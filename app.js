@@ -44,32 +44,32 @@ app.get("/drafts",authController.isAuthenticated, (req, res) => {
     res.render("drafts")
 })
 
-app.get("/view", (req, res) => {
+app.get("/view",authController.isAuthenticated, (req, res) => {
     res.render("view")
 })
 
-app.get("/published", (req, res) => {
+app.get("/published",authController.isAuthenticated, (req, res) => {
     res.render("published")
 })
 
-app.get("/users", (req, res) => {
+app.get("/users",authController.isAuthenticated, (req, res) => {
     res.render("users")
 })
 
-app.get("/account", (req, res) => {
+app.get("/account",authController.isAuthenticated, (req, res) => {
     res.render("account")
 })
 
-app.get("/create", (req, res) => {
+app.get("/create",authController.isAuthenticated, (req, res) => {
     res.render("create")
 })
 
 
-app.get("/post", (req, res) => {
+app.get("/post",authController.isAuthenticated, (req, res) => {
   res.render("post");
 });
 
-app.get("/view", (req, res) => {
+app.get("/view",authController.isAuthenticated, (req, res) => {
   res.render("view");
 });
 
