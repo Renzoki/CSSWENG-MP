@@ -10,7 +10,7 @@ exports.createArticle = async (req, res) => {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    const validStatuses = ['posted', 'unfinished', 'finished'];
+    const validStatuses = ['posted', 'unfinished', 'finished','archived'];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: 'Invalid Status Value.' });
     }
@@ -39,7 +39,7 @@ exports.updateArticle = async (req,res) =>{
         const updateData = req.body;
 
         if(updateData.status){
-            const validStatuses = ['posted', 'unfinished', 'finished'];
+            const validStatuses = ['posted', 'unfinished', 'finished','archived'];
             if(!validStatuses.includes(updateData.status)){
                 return res.status(400).json({message: 'Invalid Status Value.'});
             }

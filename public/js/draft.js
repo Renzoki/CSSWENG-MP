@@ -4,6 +4,7 @@ const modalContainer = document.querySelector("#modal-overlay");
 const yes = document.querySelector("#confirmation-yes");
 const no = document.querySelector("#confirmation-no");
 
+
 searchBar.value = "";
 
 let allArticles = [];
@@ -35,8 +36,8 @@ const renderArticles = (articles) => {
         item.dataset.creationDate = article.creation_date;
         item.dataset.id = article._id;
 
-        const formattedDate = article.publish_date
-            ? new Date(article.publish_date).toLocaleDateString("en-US")
+        const formattedDate = article.creation_date
+            ? new Date(article.creation_date).toLocaleDateString("en-US")
             : "N/A";
 
         item.innerHTML = `
@@ -175,6 +176,34 @@ listContainer.addEventListener("click", async(e) => {
     }
     }
 });
+
+//Add new article button
+document.addEventListener("click", async(e) => {
+    if(e.target.id === "add-new-article-button"){
+    try{
+        const res = await fetch('/articles',{ 
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: "New Article", status: "unfinished", author: null,  blocks: []})
+        });
+
+        const result = await res.json();
+        alert(result.message || "Article created!");
+        allArticles.push(result);
+
+        // Sort list by creation_date DESC
+        allArticles.sort((a, b) =>
+            new Date(b.creation_date) - new Date(a.creation_date)
+        );
+        renderArticles(allArticles);
+        
+    }catch (e){
+        console.error("Failed to create article:", err);
+        alert("Error creating article.");
+    }
+    }
+});
+
 
 // Initial load
 document.addEventListener("DOMContentLoaded", fetchArticles);
