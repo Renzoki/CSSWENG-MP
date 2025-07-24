@@ -121,7 +121,7 @@ const confirmModal = (action, article) => {
 };
 
 // Handle clicks on list items
-listContainer.addEventListener("click", (e) => {
+listContainer.addEventListener("click", async(e) => {
     const item = e.target.closest(".list-item");
     if (!item) return;
 
@@ -142,16 +142,37 @@ listContainer.addEventListener("click", (e) => {
     }
 
     if (e.target.classList.contains("status-info")) {
-        const status = e.target;
-        if (status.classList.contains("finished")) {
-            status.classList.replace("finished", "unfinished");
-            status.style.backgroundColor = "#CD3546";
-            status.textContent = "Unfinished";
+    const status = e.target;
+    const item = status.closest(".list-item");
+    const id = item.dataset.id;
+
+    const newStatus = status.classList.contains("finished") ? "unfinished" : "finished";
+
+    try {
+        const res = await fetch(`/articles/status/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: newStatus })
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+            // Update badge UI
+            status.classList.remove("finished", "unfinished");
+            status.classList.add(newStatus);
+            status.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+            status.style.backgroundColor = newStatus === "finished" ? "#52914E" : "#CD3546";
+
+            // Show confirmation alert
+            alert(`Status changed to ${newStatus}`);
         } else {
-            status.classList.replace("unfinished", "finished");
-            status.style.backgroundColor = "#52914E";
-            status.textContent = "Finished";
+            alert(result.message || "Failed to update status.");
         }
+    } catch (err) {
+        console.error("Failed to update status:", err);
+        alert("Error updating status.");
+    }
     }
 });
 
