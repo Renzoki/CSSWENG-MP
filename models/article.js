@@ -8,7 +8,7 @@ const blockSchema  = new mongoose.Schema({
 const articleSchema = new mongoose.Schema({
   title: { type: String, required: true },
   author: { type: String },
-  status: { type: String, required: true, enum: ['posted','unfinished','finished'] },
+  status: { type: String, required: true, enum: ['posted','unfinished','finished','archived'] },
   creation_date: { type: Date, default: Date.now, required: true },
   publish_date: { type: Date, default: null },
   blocks: [blockSchema]
