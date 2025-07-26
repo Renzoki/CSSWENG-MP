@@ -9,5 +9,6 @@ router.get('/',(req,res) => {
 router.get('/logout', authController.logout);
 router.post('/login',authController.login);
 router.post('/forgot_password',authController.forgot_password);
+router.post('/change_password',authController.change_password);
 
 module.exports = router;

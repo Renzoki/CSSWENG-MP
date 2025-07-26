@@ -89,3 +89,25 @@ exports.forgot_password = async (req,res) => {
 
     }
 };
+
+exports.change_password = async(req,res) => {
+    const {newPassword } = req.body
+    
+    try{
+        const user = await User.findById(req.session.userId);
+        if(!user){
+            return res.status(404).json({error: 'Email not found'})
+        }
+
+        user.password = newPassword;
+        await user.save()
+
+        res.json({ message: "Password changed successfully!"});
+
+
+    }catch(err){
+        console.error(err);
+        res.status(500).json({ error: 'Password change failed!'});
+    }
+
+}
