@@ -43,6 +43,7 @@ exports.logout = (req, res) => {
 
 exports.isAuthenticated = (req, res, next) => {
     if (req.session.userId) {
+        res.set('Cache-Control', 'no-store');
         return next();
     } else {
         return res.redirect('/?message=' + encodeURIComponent("Please log in first"));
