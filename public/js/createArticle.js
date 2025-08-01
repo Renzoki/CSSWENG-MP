@@ -3,13 +3,27 @@ $(document).ready(function() {
     let currentSelection = null;
     let selectedBlock = null;
 
+    console.log("Loaded article:", window.existingArticle);
+
+
     // Initialize the editor
     initializeEditor();
 
     function initializeEditor() {
         // Add initial content block after title
-        addContentBlock('text');
-        
+        if (window.existingArticle) {
+            $('#titleInput').val(existingArticle.title || '');
+            $('#authorInput').val(existingArticle.author || '');
+
+            existingArticle.blocks
+                .sort((a, b) => a.order - b.order) // optional: sort by order
+                .forEach(block => {
+                    addContentBlock(block.type, block.data);
+                });
+        } else {
+            addContentBlock('text'); // default for new article
+        }
+
         // Bind events
         bindEvents();
         
@@ -324,47 +338,58 @@ $(document).ready(function() {
     }
 
     function getArticleData() {
-        const title = $('#titleInput').val().trim();
-        const author = $('#authorInput').val().trim();
-        const content = [];
+    const title = $('#titleInput').val().trim();
+    const author = $('#authorInput').val().trim();
+    const content = [];
 
-        if (!title || !author) {
-            showAlert('Please fill in both title and author fields.', 'warning');
-            return null;
-        }
-
-        let order = 0;
-        $('#contentBlocks .content-block').each(function() {
-            const $block = $(this);
-            
-            if ($block.hasClass('text-block-container')) {
-                const textContent = $block.find('.editable-content').html().trim();
-                if (textContent) {
-                    content.push({
-                        type: 'text',
-                        data: textContent,
-                        order: order++
-                    });
-                }
-            } else if ($block.hasClass('image-block-container')) {
-                const $img = $block.find('.uploaded-image');
-                if ($img.length) {
-                    content.push({
-                        type: 'image',
-                        data: $img.attr('src'),
-                        order: order++
-                    });
-                }
-            }
-        });
-
-        if (content.length === 0) {
-            showAlert('Please add some content to your article.', 'warning');
-            return null;
-        }
-
-        return { title, author, content };
+    if (!title || !author) {
+        showAlert('Please fill in both title and author fields.', 'warning');
+        return null;
     }
+
+    let order = 0;
+    $('#contentBlocks .content-block').each(function() {
+        const $block = $(this);
+        
+        if ($block.hasClass('text-block-container')) {
+            const textContent = $block.find('.editable-content').html().trim();
+            if (textContent) {
+                content.push({
+                    type: 'text',
+                    data: textContent,
+                    order: order++
+                });
+            }
+        } else if ($block.hasClass('image-block-container')) {
+            const $img = $block.find('.uploaded-image');
+            if ($img.length) {
+                content.push({
+                    type: 'image',
+                    data: $img.attr('src'),
+                    order: order++
+                });
+            }
+        }
+    });
+
+    if (content.length === 0) {
+        showAlert('Please add some content to your article.', 'warning');
+        return null;
+    }
+
+    const articleData = {
+        title,
+        author,
+        content
+    };
+
+    if (window.existingArticle?._id) {
+        articleData._id = existingArticle._id;
+    }
+
+    return articleData;
+}
+
 
     function saveDraft(redirect = false) {
         const articleData = getArticleData();
