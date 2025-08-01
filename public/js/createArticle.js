@@ -27,6 +27,7 @@ $(document).ready(function() {
         // Bind events
         bindEvents();
         
+        
         // Focus on title input
         $('#titleInput').focus();
     }
@@ -52,6 +53,11 @@ $(document).ready(function() {
         $('#backBtn').on('click', function() {
             $('#saveDraftModal').modal('show');
         });
+
+        $('#discardDraftBtn').on('click', function () {
+            window.location.href = '/drafts'; 
+        });
+
 
         // Draft button
         $('#draftBtn').on('click', function() {
@@ -109,6 +115,8 @@ $(document).ready(function() {
             }
         });
     }
+
+    
 
     function addContentBlock(type, content = '', insertAfter = null) {
         blockIdCounter++;
@@ -399,7 +407,7 @@ $(document).ready(function() {
         $btn.prop('disabled', true).addClass('loading');
 
         $.ajax({
-            url: '/api/articles/draft',
+            url: '/articles/saveDraft',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(articleData),
@@ -408,7 +416,7 @@ $(document).ready(function() {
                     showAlert('Article saved as draft!', 'success');
                     if (redirect) {
                         setTimeout(() => {
-                            window.location.href = '/';
+                            window.location.href = '/drafts';
                         }, 1000);
                     }
                 } else {
