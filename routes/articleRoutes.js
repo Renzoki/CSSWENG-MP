@@ -10,6 +10,7 @@ router.patch('/:id', articleController.updateArticle);
 router.delete('/:id', articleController.deleteArticle);
 router.patch('/status/:id', articleController.updateStatus);
 router.get('/createPage/:id', articleController.loadCreatePageWithArticle);
+router.post('/saveDraft',articleController.saveDraft);
 
 module.exports = router;
 
