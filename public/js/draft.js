@@ -198,6 +198,13 @@
                 new Date(b.creation_date) - new Date(a.creation_date)
             );
             renderArticles(allArticles);
+
+             if(res.ok){
+                setTimeout(() => {
+                    window.location.href = `/articles/createPage/${result._id}`;
+                }, 500); 
+            }
+            
             
         }catch (e){
             console.error("Failed to create article:", err);

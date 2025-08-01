@@ -5,6 +5,7 @@ const path = require('path')
 const authRoutes = require('./routes/authRoutes')
 const articleRoutes = require('./routes/articleRoutes')
 const authController = require('./controllers/authController')
+const uploadRoutes = require('./routes/uploadRoutes');
 const connectDB = require('./config/connect')
 
 
@@ -35,6 +36,8 @@ app.use(session({ //establishing a session
 //Routes
 app.use('/',authRoutes)
 app.use('/articles',articleRoutes)
+app.use('/uploads', express.static('public/uploads'));  // serve files
+app.use('/uploads', uploadRoutes);                    
 
 app.get("/forgot", (req, res) => {
     res.render("forgot")

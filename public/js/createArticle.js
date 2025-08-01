@@ -3,26 +3,33 @@ $(document).ready(function() {
     let currentSelection = null;
     let selectedBlock = null;
 
-    console.log("Loaded article:", window.existingArticle);
+    //console.log("Loaded article:", window.existingArticle); debug log
 
 
     // Initialize the editor
     initializeEditor();
 
     function initializeEditor() {
+
         // Add initial content block after title
         if (window.existingArticle) {
             $('#titleInput').val(existingArticle.title || '');
             $('#authorInput').val(existingArticle.author || '');
 
-            existingArticle.blocks
-                .sort((a, b) => a.order - b.order) // optional: sort by order
-                .forEach(block => {
+            const sortedBlocks = (existingArticle.blocks || []).sort((a, b) => a.order - b.order);
+
+            if (sortedBlocks.length > 0) {
+                sortedBlocks.forEach(block => {
                     addContentBlock(block.type, block.data);
                 });
+            } else {
+                // No content blocks yet — start with one
+                addContentBlock('text');
+            }
         } else {
-            addContentBlock('text'); // default for new article
+            addContentBlock('text');
         }
+
 
         // Bind events
         bindEvents();
@@ -283,7 +290,7 @@ $(document).ready(function() {
         $placeholder.html('<i class="fas fa-spinner fa-spin"></i><p>Uploading...</p>');
 
         $.ajax({
-            url: '/api/upload',
+            url: '/uploads/single',
             type: 'POST',
             data: formData,
             processData: false,
@@ -470,23 +477,46 @@ $(document).ready(function() {
         const $btn = $('#confirmPublish');
         $btn.prop('disabled', true).addClass('loading');
 
+        // Step 1: Save latest changes as draft
         $.ajax({
-            url: '/api/articles/publish',
+            url: '/articles/saveDraft',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(articleData),
-            success: function(response) {
-                if (response.success) {
-                    showAlert('Article published successfully!', 'success');
-                    setTimeout(() => {
-                        window.location.href = '/';
-                    }, 2000);
-                } else {
-                    showAlert('Failed to publish article: ' + response.message, 'danger');
+            success: function(draftResponse) {
+                if (!draftResponse.success || !draftResponse.article?._id) {
+                    showAlert('Failed to save before publishing.', 'danger');
+                    return;
                 }
+
+                const articleId = draftResponse.article._id;
+
+                // Step 2: Change status to published + set publish_date
+                $.ajax({
+                    url: `/articles/status/${articleId}`,
+                    type: 'PATCH',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        status: 'published',
+                        publish_date: new Date()
+                    }),
+                    success: function(statusResponse) {
+                        if (statusResponse.article?.status === 'published') {
+                            showAlert('Article published successfully!', 'success');
+                            setTimeout(() => {
+                                window.location.href = '/published'; 
+                            }, 1500);
+                        } else {
+                            showAlert('Failed to publish: ' + statusResponse.message, 'danger');
+                        }
+                    },
+                    error: function() {
+                        showAlert('Error publishing article.', 'danger');
+                    }
+                });
             },
             error: function() {
-                showAlert('Error publishing article. Please try again.', 'danger');
+                showAlert('Error saving before publishing.', 'danger');
             },
             complete: function() {
                 $btn.prop('disabled', false).removeClass('loading');
@@ -494,6 +524,7 @@ $(document).ready(function() {
             }
         });
     }
+
 
     function showAlert(message, type) {
         const alertHtml = `
