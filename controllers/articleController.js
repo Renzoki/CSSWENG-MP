@@ -149,3 +149,17 @@ exports.updateStatus = async (req, res) => {
     return res.status(500).json({ message: "Server error while updating status." });
   }
 };
+
+exports.loadCreatePageWithArticle = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const article = await Article.findById(id);
+        if (!article) return res.status(404).send("Article not found");
+
+        res.render('createArticle', { article: JSON.stringify(article) }); // serialized into JS
+    } catch (err) {
+        console.error("Error loading article:", err);
+        res.status(500).send("Server error");
+    }
+};
+
