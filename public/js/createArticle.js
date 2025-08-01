@@ -11,6 +11,8 @@ $(document).ready(function() {
 
     function initializeEditor() {
 
+
+
         // Add initial content block after title
         if (window.existingArticle) {
             $('#titleInput').val(existingArticle.title || '');
@@ -30,7 +32,7 @@ $(document).ready(function() {
             addContentBlock('text');
         }
 
-
+        
         // Bind events
         bindEvents();
         
@@ -38,6 +40,60 @@ $(document).ready(function() {
         // Focus on title input
         $('#titleInput').focus();
     }
+
+    //To check if any changes were made before the back modal shows
+    let originalSnapshot = {
+        title: $('#titleInput').val().trim(),
+        author: $('#authorInput').val().trim(),
+        blockCount: $('#contentBlocks .content-block').length,
+        blockContents: []
+    };
+
+    $('#contentBlocks .content-block').each(function() {
+        const $block = $(this);
+        if ($block.hasClass('text-block-container')) {
+            originalSnapshot.blockContents.push($block.find('.editable-content').text().trim());
+        } else if ($block.hasClass('image-block-container')) {
+            const $img = $block.find('.uploaded-image');
+            originalSnapshot.blockContents.push($img.attr('src') || '');
+        }
+    });
+
+    function hasEditorChanged() {
+        const currentTitle = $('#titleInput').val().trim();
+        const currentAuthor = $('#authorInput').val().trim();
+        const currentBlocks = $('#contentBlocks .content-block');
+
+        if (currentTitle !== originalSnapshot.title || currentAuthor !== originalSnapshot.author) {
+            return true;
+        }
+
+        if (currentBlocks.length !== originalSnapshot.blockContents.length) {
+            return true;
+        }
+
+        let changed = false;
+        currentBlocks.each(function(index) {
+            const $block = $(this);
+            let currentData = '';
+
+            if ($block.hasClass('text-block-container')) {
+                currentData = $block.find('.editable-content').text().trim();
+            } else if ($block.hasClass('image-block-container')) {
+                const $img = $block.find('.uploaded-image');
+                currentData = $img.attr('src') || '';
+            }
+
+            if (currentData !== originalSnapshot.blockContents[index]) {
+                changed = true;
+                return false; // break loop
+            }
+        });
+
+        return changed;
+    }
+
+
 
     function bindEvents() {
         // Title input events
@@ -58,8 +114,13 @@ $(document).ready(function() {
 
         // Back button
         $('#backBtn').on('click', function() {
-            $('#saveDraftModal').modal('show');
+            if (hasEditorChanged()) {
+                $('#saveDraftModal').modal('show');
+            } else {
+                window.location.href = '/drafts';
+            }
         });
+
 
         $('#discardDraftBtn').on('click', function () {
             window.location.href = '/drafts'; 
@@ -157,13 +218,13 @@ $(document).ready(function() {
                     </div>
                     <div class="image-block">
                         ${content ? 
-                            `<div class="image-container">
+                            `<div class="image-container" tabindex="0" onclick="selectImage($(this).closest('.content-block'))">
                                 <img src="${content}" class="uploaded-image" alt="Article image">
-                             </div>` : 
+                            </div>` : 
                             `<div class="image-placeholder" onclick="selectImage($(this).closest('.content-block'))">
                                 <i class="fas fa-image"></i>
                                 <p>Click to add an image</p>
-                             </div>`
+                            </div>`
                         }
                     </div>
                 </div>
@@ -184,54 +245,76 @@ $(document).ready(function() {
         return $block;
     }
 
-    function bindBlockEvents($block) {
-        if ($block.hasClass('text-block-container')) {
-            const $editable = $block.find('.editable-content');
-            
-            $editable.on('keydown', function(e) {
-                const $this = $(this);
-                
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    // Create new block after this one
-                    const newBlock = addContentBlock('text', '', $block);
-                    focusBlock(newBlock);
-                }
-                
-                if (e.key === 'Backspace' && $this.text().trim() === '') {
-                    e.preventDefault();
-                    // Don't remove if it's the only block
-                    if ($('#contentBlocks .content-block').length > 1) {
-                        const prevBlock = $block.prev('.content-block');
-                        removeBlock($block);
-                        if (prevBlock.length) {
-                            focusBlock(prevBlock);
-                            // Move cursor to end
-                            const range = document.createRange();
-                            const sel = window.getSelection();
-                            const editableContent = prevBlock.find('.editable-content')[0];
-                            if (editableContent) {
-                                range.selectNodeContents(editableContent);
-                                range.collapse(false);
-                                sel.removeAllRanges();
-                                sel.addRange(range);
-                            }
+function bindBlockEvents($block) {
+    if ($block.hasClass('text-block-container')) {
+        const $editable = $block.find('.editable-content');
+
+        $editable.on('keydown', function(e) {
+            const $this = $(this);
+
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const newBlock = addContentBlock('text', '', $block);
+                focusBlock(newBlock);
+            }
+
+            if (e.key === 'Backspace' && $this.text().trim() === '') {
+                e.preventDefault();
+                if ($('#contentBlocks .content-block').length > 1) {
+                    const prevBlock = $block.prev('.content-block');
+                    removeBlock($block);
+                    if (prevBlock.length) {
+                        focusBlock(prevBlock);
+                        const range = document.createRange();
+                        const sel = window.getSelection();
+                        const editableContent = prevBlock.find('.editable-content')[0];
+                        if (editableContent) {
+                            range.selectNodeContents(editableContent);
+                            range.collapse(false);
+                            sel.removeAllRanges();
+                            sel.addRange(range);
                         }
                     }
                 }
-            });
+            }
+        });
 
-            $editable.on('focus', function() {
-                selectedBlock = $block;
-            });
+        $editable.on('focus', function() {
+            selectedBlock = $block;
+        });
 
-            $editable.on('paste', function(e) {
+        $editable.on('paste', function(e) {
+            e.preventDefault();
+            const text = (e.originalEvent.clipboardData || window.clipboardData).getData('text');
+            document.execCommand('insertText', false, text);
+        });
+
+    } else if ($block.hasClass('image-block-container')) {
+        $block.attr('tabindex', 0); // Make block focusable
+
+        $block.on('keydown', function(e) {
+            if (e.key === 'Enter') {
                 e.preventDefault();
-                const text = (e.originalEvent.clipboardData || window.clipboardData).getData('text');
-                document.execCommand('insertText', false, text);
+                const newBlock = addContentBlock('text', '', $block);
+                focusBlock(newBlock);
+            }
+        });
+
+        $block.on('focus', function() {
+            selectedBlock = $block;
+        });
+
+        // Also bind click on image-container to make it interactive
+        const $imageContainer = $block.find('.image-container');
+        if ($imageContainer.length) {
+            $imageContainer.attr('tabindex', 0); // Make it focusable too
+            $imageContainer.on('click', function() {
+                selectedBlock = $block;
+                $block.focus(); // So Enter works after clicking
             });
         }
     }
+}
 
     function focusBlock($block) {
         if ($block.hasClass('text-block-container')) {
@@ -298,18 +381,20 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success) {
                     $block.find('.image-block').html(`
-                        <div class="image-container">
+                        <div class="image-container" tabindex="0" onclick="selectImage($(this).closest('.content-block'))">
                             <img src="${response.imageUrl}" class="uploaded-image" alt="Article image">
                         </div>
                     `);
-                    showAlert('Image uploaded successfully!', 'success');
 
+                    bindBlockEvents($block); // <-- this ensures Enter works & selectedBlock updates
+
+                    showAlert('Image uploaded successfully!', 'success');
                 } else {
                     showAlert('Failed to upload image: ' + response.message, 'danger');
-                    // Restore placeholder
                     $placeholder.html('<i class="fas fa-image"></i><p>Click to add an image</p>');
                 }
             },
+
             error: function() {
                 showAlert('Error uploading image. Please try again.', 'danger');
                 // Restore placeholder
