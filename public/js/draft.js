@@ -186,7 +186,18 @@
             const res = await fetch('/articles',{ 
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ title: "New Article", status: "unfinished", author: null,  blocks: []})
+                body: JSON.stringify({
+                title: "New Article",
+                status: "unfinished",
+                author: null,
+                blocks: [
+                    {
+                        type: "text",
+                        data: "",
+                        order: 0
+                    }
+                ]
+                })
             });
 
             const result = await res.json();
