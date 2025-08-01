@@ -35,6 +35,8 @@ $(document).ready(function() {
         
         // Bind events
         bindEvents();
+        ensureTrailingEmptyTextBlock();
+
         
         
         // Focus on title input
@@ -92,6 +94,19 @@ $(document).ready(function() {
 
         return changed;
     }
+
+    function ensureTrailingEmptyTextBlock() {
+        const $lastBlock = $('#contentBlocks .content-block').last();
+
+        if (
+            !$lastBlock.length || 
+            !$lastBlock.hasClass('text-block-container') ||
+            $lastBlock.find('.editable-content').text().trim() !== ''
+        ) {
+            addContentBlock('text');
+        }
+    }
+
 
 
 
