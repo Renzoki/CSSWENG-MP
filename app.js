@@ -47,6 +47,10 @@ app.use('/uploads', uploadRoutes);
 app.use('/mainWeb', mainWebRoutes);  
 
 app.use('/', mainWebRoutes);
+app.use('/uploads', uploadRoutes);     
+app.use('/mainWeb', mainWebRoutes);  
+
+app.use('/', mainWebRoutes);
 
 app.get("/forgot", (req, res) => {
     res.render("ADMIN/forgot")
@@ -112,5 +116,7 @@ app.get("/News", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
 })
+
+
 
 
