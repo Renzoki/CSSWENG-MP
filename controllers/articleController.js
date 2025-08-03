@@ -188,7 +188,6 @@ exports.saveDraft = async (req, res) => {
         {
           title,
           author,
-          status: "unfinished",
           blocks: content
         },
         { new: true, runValidators: true }
@@ -203,7 +202,6 @@ exports.saveDraft = async (req, res) => {
       const newArticle = new Article({
         title,
         author,
-        status: "unfinished",
         blocks: content,
         publish_date: null
       });
