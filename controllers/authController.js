@@ -29,16 +29,18 @@ exports.login = async (req,res) => {
 
     }
 };
+
 exports.logout = (req, res) => {
     req.session.destroy(err => {
         if (err) {
             console.error("Logout error: ", err);
-            return res.redirect('/?message=' + encodeURIComponent("Logout failed, please try again"));
+            return res.redirect('/admin/?message=' + encodeURIComponent("Logout failed, please try again"));
         }
         res.clearCookie('connect.sid');
-        return res.redirect('/?message=' + encodeURIComponent("Logged out successfully"));
+        return res.redirect('/admin/?message=' + encodeURIComponent("Logged out successfully"));
     });
 };
+
 
 
 exports.isAuthenticated = (req, res, next) => {

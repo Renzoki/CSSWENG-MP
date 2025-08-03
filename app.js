@@ -34,7 +34,7 @@ app.use(session({ //establishing a session
 
 
 //Routes
-app.use('/',authRoutes)
+app.use('/admin',authRoutes)
 app.use('/articles',articleRoutes)
 app.use('/uploads', express.static('public/uploads'));  // serve files
 app.use('/uploads', uploadRoutes);                    

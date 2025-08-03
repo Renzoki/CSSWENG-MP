@@ -27,7 +27,7 @@ const popUpConfirmation = () => {
         if (w.target === yes) {
             //TODO: Insert API call here
             try{
-                const res = await fetch(`/change_password`,{
+                const res = await fetch(`/admin/change_password`,{
                     method: "POST",
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({newPassword})

@@ -18,7 +18,7 @@ if (loginForm) {
         }
 
         try {
-            const response = await fetch("/login", {
+            const response = await fetch("/admin/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password })
@@ -52,7 +52,7 @@ if (forgotForm) {
         }
 
         try {
-            const response = await fetch("/forgot_password", {
+            const response = await fetch("/admin/forgot_password", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -64,7 +64,7 @@ if (forgotForm) {
 
             if (response.ok) {
                 alert("Temporary password sent to your email.");
-                window.location.href = "/";
+                window.location.href = "/admin";
             } else {
                 alert(result.error || "Something went wrong.");
             }
