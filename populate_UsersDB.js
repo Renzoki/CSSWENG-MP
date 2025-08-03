@@ -6,9 +6,9 @@ const User = require('./models/user');
     await connectDB();
 
     const testUser = new User({
-      email: "test@gmail.com",
-      username: "test",
-      password: "test"
+      email: "renzonifico@gmail.com",
+      username: "12345678",
+      password: "12345678"
     });
 
     await testUser.save();
