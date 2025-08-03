@@ -128,18 +128,24 @@ $(document).ready(function() {
         });
 
         // Back button
+        
         $('#backBtn').on('click', function() {
+            const targetPage = (window.existingArticle?.status === 'published') ? '/published' : '/drafts';
+
             if (hasEditorChanged()) {
-                $('#saveDraftModal').modal('show');
+                $('#saveDraftModal').data('target-page', targetPage).modal('show');
             } else {
-                window.location.href = '/drafts';
+                window.location.href = targetPage;
             }
         });
 
 
+
         $('#discardDraftBtn').on('click', function () {
-            window.location.href = '/drafts'; 
+            const target = $('#saveDraftModal').data('target-page') || '/drafts';
+            window.location.href = target;
         });
+
 
 
         // Draft button
@@ -148,14 +154,35 @@ $(document).ready(function() {
         });
 
         // Publish button
-        $('#publishBtn').on('click', function() {
-            showPublishPreview();
-        });
+       const publishBtn = $('#publishBtn');
+
+        if (window.existingArticle) {
+        const status = existingArticle.status;
+
+        if (status === 'published') {
+            publishBtn.text('Unpublish Article');
+            publishBtn.prop('disabled', false);
+
+            publishBtn.off('click').on('click', function () {
+                unpublishArticle(window.existingArticle._id);
+            });
+        } else if (status === 'finished') {
+            publishBtn.text('Publish Article');
+            publishBtn.prop('disabled', false);
+            publishBtn.off('click').on('click', showPublishPreview);
+        } else if (status === 'unfinished') {
+            publishBtn.text('Finish and Publish');
+            publishBtn.prop('disabled', false);
+            publishBtn.off('click').on('click', showPublishPreview);
+        }
+     }
 
         // Modal confirmations
-        $('#confirmSaveDraft').on('click', function() {
-            saveDraft(true); // true for redirect after save
+        $('#confirmSaveDraft').on('click', function () {
+            const target = $('#saveDraftModal').data('target-page') || '/drafts';
+            saveDraft(true, target);
         });
+
 
         $('#confirmPublish').on('click', function() {
             publishArticle();
@@ -199,7 +226,38 @@ $(document).ready(function() {
         });
     }
 
-    
+    //Unpublishes article 
+    function unpublishArticle(articleId) {
+        const $btn = $('#publishBtn');
+        $btn.prop('disabled', true).addClass('loading');
+
+        $.ajax({
+            url: `/articles/status/${articleId}`,
+            type: 'PATCH',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                status: 'finished',
+                publish_date: null
+            }),
+            success: function (res) {
+                if (res.article?.status === 'finished') {
+                    showAlert('Article has been unpublished.', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/drafts'; // reload to reflect new status
+                    }, 1000);
+                } else {
+                    showAlert('Failed to unpublish: ' + res.message, 'danger');
+                }
+            },
+            error: function () {
+                showAlert('Error unpublishing article.', 'danger');
+            },
+            complete: function () {
+                $btn.prop('disabled', false).removeClass('loading');
+            }
+        });
+    }
+
 
     function addContentBlock(type, content = '', insertAfter = null) {
         blockIdCounter++;
@@ -506,7 +564,7 @@ function bindBlockEvents($block) {
 }
 
 
-    function saveDraft(redirect = false) {
+    function saveDraft(redirect = false ,targetPage = '/drafts') {
         const articleData = getArticleData();
         if (!articleData) return;
 
@@ -523,7 +581,7 @@ function bindBlockEvents($block) {
                     showAlert('Article saved as draft!', 'success');
                     if (redirect) {
                         setTimeout(() => {
-                            window.location.href = '/drafts';
+                            window.location.href = targetPage;
                         }, 1000);
                     }
                 } else {
@@ -605,7 +663,7 @@ function bindBlockEvents($block) {
                             showAlert('Article published successfully!', 'success');
                             setTimeout(() => {
                                 window.location.href = '/published'; 
-                            }, 1500);
+                            }, 500);
                         } else {
                             showAlert('Failed to publish: ' + statusResponse.message, 'danger');
                         }
