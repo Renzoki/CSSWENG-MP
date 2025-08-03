@@ -42,13 +42,19 @@ app.use(session({ //establishing a session
 app.use('/admin',authRoutes)
 app.use('/articles',articleRoutes)
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 app.use('/uploads', uploadRoutes);
 app.use('/web', webRoutes);                    
 =======
+=======
+>>>>>>> Stashed changes
 app.use('/uploads', uploadRoutes);     
 app.use('/mainWeb', mainWebRoutes);  
 
 app.use('/', mainWebRoutes);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 app.get("/forgot", (req, res) => {
