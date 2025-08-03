@@ -41,12 +41,6 @@ app.use(session({ //establishing a session
 //Routes
 app.use('/admin',authRoutes)
 app.use('/articles',articleRoutes)
-app.use('/uploads', uploadRoutes);
-app.use('/web', webRoutes); 
-app.use('/uploads', uploadRoutes);     
-app.use('/mainWeb', mainWebRoutes);  
-
-app.use('/', mainWebRoutes);
 app.use('/uploads', uploadRoutes);     
 app.use('/mainWeb', mainWebRoutes);  
 
@@ -116,7 +110,5 @@ app.get("/News", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
 })
-
-
 
 
