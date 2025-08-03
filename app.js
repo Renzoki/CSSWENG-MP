@@ -42,7 +42,8 @@ app.use(session({ //establishing a session
 app.use('/admin',authRoutes)
 app.use('/articles',articleRoutes)
 app.use('/uploads', uploadRoutes);     
-app.use('/mainWeb', mainWebRoutes);  
+app.use('/mainWeb', mainWebRoutes); 
+app.use('/web', webRoutes) 
 
 app.use('/', mainWebRoutes);
 
