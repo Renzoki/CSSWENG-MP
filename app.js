@@ -67,7 +67,6 @@ app.get("/create",authController.isAuthenticated, (req, res) => {
     res.render("create")
 })
 
-
 app.get("/post",authController.isAuthenticated, (req, res) => {
   res.render("post");
 });
@@ -75,6 +74,11 @@ app.get("/post",authController.isAuthenticated, (req, res) => {
 app.get("/view",authController.isAuthenticated, (req, res) => {
   res.render("view");
 });
+
+app.get("/articles/createPage/:id", authController.isAuthenticated, (req, res) => {
+    res.render("create");
+});
+
 
 
 app.listen(PORT, () => {
