@@ -75,10 +75,6 @@ app.get("/view",authController.isAuthenticated, (req, res) => {
   res.render("view");
 });
 
-app.get("/articles/createPage/:id", authController.isAuthenticated, (req, res) => {
-    res.render("create");
-});
-
 
 
 app.listen(PORT, () => {

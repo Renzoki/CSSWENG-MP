@@ -48,7 +48,7 @@ exports.isAuthenticated = (req, res, next) => {
         res.set('Cache-Control', 'no-store');
         return next();
     } else {
-        return res.redirect('/?message=' + encodeURIComponent("Please log in first"));
+        return res.redirect('/admin?message=' + encodeURIComponent("Please log in first"));
     }
 };
 
