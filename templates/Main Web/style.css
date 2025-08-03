@@ -17,6 +17,7 @@ main {
   object-fit: cover; /* crop image to fit */
 }
 
+
 h1, h2 {
     font-family: 'Poppins', sans-serif;
     font-weight: bold;
