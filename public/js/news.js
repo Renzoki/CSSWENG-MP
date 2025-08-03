@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="d-flex align-items-center mb-2">
               <small class="text-muted">By: ${article.author}</small>
             </div>
-            <a href="/ArticlePage/${article._id}">
+            <a href="/ArticlePage/${article._id}" style="color: black; text-decoration: none;">
               <h5 class="fw-bold">${article.title}</h5>
             </a>
             <p class="text-muted mb-1" style="max-width: 600px;">
