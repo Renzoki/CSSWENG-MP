@@ -88,7 +88,7 @@ app.get("/Faculty", (req, res) => {
   res.render("Main/Faculty");
 });
 
-app.get("/index", (req, res) => {
+app.get("/", (req, res) => {
   res.render("Main/index");
 });
 
