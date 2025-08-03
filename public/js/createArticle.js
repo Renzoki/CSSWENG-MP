@@ -579,6 +579,24 @@ function bindBlockEvents($block) {
             success: function(response) {
                 if (response.success) {
                     showAlert('Article saved as draft!', 'success');
+
+                    originalSnapshot = {
+                        title: $('#titleInput').val().trim(),
+                        author: $('#authorInput').val().trim(),
+                        blockCount: $('#contentBlocks .content-block').length,
+                        blockContents: []
+                    };
+
+                    $('#contentBlocks .content-block').each(function() {
+                        const $block = $(this);
+                        if ($block.hasClass('text-block-container')) {
+                            originalSnapshot.blockContents.push($block.find('.editable-content').text().trim());
+                        } else if ($block.hasClass('image-block-container')) {
+                            const $img = $block.find('.uploaded-image');
+                            originalSnapshot.blockContents.push($img.attr('src') || '');
+                        }
+                    });
+
                     if (redirect) {
                         setTimeout(() => {
                             window.location.href = targetPage;
