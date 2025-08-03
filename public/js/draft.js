@@ -217,7 +217,7 @@
             }
             
             
-        }catch (e){
+        }catch (err){
             console.error("Failed to create article:", err);
             alert("Error creating article.");
         }

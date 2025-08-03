@@ -136,7 +136,7 @@ listContainer.addEventListener("click", (e) => {
 
     if (e.target.classList.contains("edit-icon")) {
         //TEMPORARY, IDK WHERE TO REDIRECT
-        window.location.href = `/articles/edit/${article._id}`;
+        window.location.href = `/articles/createPage/${article._id}`;
     }
 });
 
