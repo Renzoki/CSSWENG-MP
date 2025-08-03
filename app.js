@@ -73,11 +73,6 @@ app.get("/view", (req, res) => {
   res.render("ADMIN/view");
 });
 
-
-app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`)
-})
-
 //FOR TESTING MAIN WEB PAGES ONLY 
 app.get("/AboutUs", (req, res) => {
   res.render("Main/AboutUs");
@@ -106,3 +101,9 @@ app.get("/Music", (req, res) => {
 app.get("/News", (req, res) => {
   res.render("Main/News");
 });
+
+app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`)
+})
+
+
