@@ -7,6 +7,9 @@ const articleRoutes = require('./routes/articleRoutes')
 const authController = require('./controllers/authController')
 const uploadRoutes = require('./routes/uploadRoutes');
 const connectDB = require('./config/connect')
+const webRoutes = require('./routes/webRoutes');
+
+
 
 
 const PORT = process.env.PORT || 3000
@@ -37,7 +40,8 @@ app.use(session({ //establishing a session
 //Routes
 app.use('/admin',authRoutes)
 app.use('/articles',articleRoutes)
-app.use('/uploads', uploadRoutes);                    
+app.use('/uploads', uploadRoutes);
+app.use('/web', webRoutes);                    
 
 app.get("/forgot", (req, res) => {
     res.render("ADMIN/forgot")
