@@ -71,9 +71,6 @@ app.get("/post",authController.isAuthenticated, (req, res) => {
   res.render("post");
 });
 
-app.get("/view",authController.isAuthenticated, (req, res) => {
-  res.render("view");
-});
 
 
 
