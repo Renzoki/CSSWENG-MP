@@ -9,6 +9,11 @@ body {
     flex-direction: column;
 }
 
+
+html {
+    scroll-behavior: smooth;
+}
+
 main {
     flex: 1;
 }
@@ -98,6 +103,8 @@ p {
     border-color: rgb(207, 92, 128);
     color: white;
 }
+
+
 
 a {
     text-decoration: none;
@@ -226,7 +233,7 @@ a:active {
 }
 
 .card-img-top {
-    height: 200px;
+    height: 350px;
     object-fit: cover;
 }
 
