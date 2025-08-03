@@ -41,33 +41,12 @@ app.use(session({ //establishing a session
 //Routes
 app.use('/admin',authRoutes)
 app.use('/articles',articleRoutes)
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 app.use('/uploads', uploadRoutes);
-app.use('/web', webRoutes);                    
-=======
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+app.use('/web', webRoutes); 
 app.use('/uploads', uploadRoutes);     
 app.use('/mainWeb', mainWebRoutes);  
 
 app.use('/', mainWebRoutes);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 app.get("/forgot", (req, res) => {
     res.render("ADMIN/forgot")
@@ -133,7 +112,5 @@ app.get("/News", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
 })
-
-
 
 
