@@ -44,9 +44,12 @@ app.use('/articles',articleRoutes)
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 app.use('/uploads', uploadRoutes);
 app.use('/web', webRoutes);                    
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -57,6 +60,9 @@ app.use('/mainWeb', mainWebRoutes);
 app.use('/', mainWebRoutes);
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
