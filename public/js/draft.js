@@ -212,7 +212,7 @@
 
              if(res.ok){
                 setTimeout(() => {
-                    window.location.href = `/articles/createPage/${result._id}`;
+                    window.location.href = `/articles/editArticle/${result._id}`;
                 }, 500); 
             }
             
