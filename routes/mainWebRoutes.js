@@ -6,7 +6,7 @@ const Inquiry = require('../models/inquiry'); // <-- Add this
 // 1. Get all articles with title, author, first text block, and first image filename
 router.get('/getArticleList', async (req, res) => {
   try {
-    const articles = await Article.find({}, 'title author blocks publish_date').lean();
+    const articles = await Article.find({ status: 'published' }, 'title author blocks publish_date').sort({ publish_date: -1 }).lean();
 
     const result = articles.map(article => {
       const firstTextBlock = article.blocks.find(block => block.type === 'text');
@@ -48,30 +48,20 @@ router.get('/ArticlePage/:id', async (req, res) => {
   }
 });
 
-// POST /mainWeb/inquiry - Save a user inquiry
-router.post('/inquiry', async (req, res) => {
+router.get('/getRecentArticles', async (req, res) => {
   try {
-    const { name, email, contactNumber, inquiry } = req.body;
+    const articles = await Article.find({ status: 'published' })
+      .sort({ publish_date: -1 })
+      .limit(6)
+      .lean();
 
-    // Basic validation
-    if (!name || !email || !inquiry) {
-      return res.status(400).json({ error: 'Name, email, and inquiry are required' });
-    }
-
-    const newInquiry = new Inquiry({
-      name,
-      email,
-      contactNumber,
-      inquiry
-    });
-
-    await newInquiry.save();
-
-    res.status(201).json({ message: 'Inquiry submitted successfully' });
+    res.json(articles);
   } catch (err) {
-    console.error('Error saving inquiry:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error fetching recent articles:', err);
+    res.status(500).json({ error: 'Server error' });
   }
 });
+
+
 
 module.exports = router;

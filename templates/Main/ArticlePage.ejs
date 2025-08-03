@@ -36,7 +36,9 @@
       <!-- Render article blocks -->
       <% article.blocks.forEach(block => { %>
         <% if (block.type === 'text') { %>
-          <p class="fs-5"><%- block.data %></p>
+          <div class="fs-6 mb-4">
+            <%- block.data %>
+          </div>
         <% } else if (block.type === 'image') { %>
           <div class="text-center my-4">
             <img src="<%= block.data %>" alt="Article Image" class="img-fluid rounded w-100" onerror="this.onerror=null; this.src='/assets/photo_unavailable.jpg';"/>

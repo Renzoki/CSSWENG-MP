@@ -10,6 +10,7 @@ const mainWebRoutes = require('./routes/mainWebRoutes');
 const connectDB = require('./config/connect')
 const webRoutes = require('./routes/webRoutes');
 
+const Article = require('./models/article'); 
 
 
 
@@ -96,8 +97,13 @@ app.get("/Faculty", (req, res) => {
   res.render("Main/Faculty");
 });
 
-app.get("/", (req, res) => {
-  res.render("Main/index");
+app.get('/', async (req, res) => {
+  const recentArticles = await Article.find({ status: 'published' })
+    .sort({ publish_date: -1 })
+    .limit(6)
+    .lean();
+
+  res.render('Main/index', { recentArticles });
 });
 
 app.get("/Music", (req, res) => {
@@ -107,6 +113,8 @@ app.get("/Music", (req, res) => {
 app.get("/News", (req, res) => {
   res.render("Main/News");
 });
+
+
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)

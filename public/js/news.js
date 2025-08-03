@@ -1,13 +1,17 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const container = document.querySelector('#articlesContainer');
   const paginationContainer = document.querySelector('.pagination');
+  const searchInput = document.querySelector('.form-control[placeholder="Search news..."]');
+  const searchButton = document.querySelector('.btn.btn-outline-secondary');
   const pageSize = 10;
   let currentPage = 1;
   let allArticles = [];
+  let filteredArticles = [];
 
   try {
     const res = await fetch('/mainWeb/getArticleList');
     allArticles = await res.json();
+    filteredArticles = [...allArticles];
 
     renderPage(currentPage);
     renderPagination();
@@ -16,18 +20,49 @@ document.addEventListener('DOMContentLoaded', async () => {
     container.innerHTML = `<p class="text-danger">Failed to load articles. Please try again later.</p>`;
   }
 
+  // Filter articles based on search query
+  function filterArticles(query) {
+    query = query.toLowerCase();
+    filteredArticles = allArticles.filter(article => {
+      return (
+        article.title.toLowerCase().includes(query) ||
+        (article.firstTextData && article.firstTextData.toLowerCase().includes(query))
+      );
+    });
+    currentPage = 1;
+    renderPage(currentPage);
+    renderPagination();
+  }
+
+  // Handle button click
+  searchButton.addEventListener('click', () => {
+    const query = searchInput.value.trim();
+    filterArticles(query);
+  });
+
+  // Also handle Enter key press in the search input
+  searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      filterArticles(searchInput.value.trim());
+    }
+  });
+
   function renderPage(page) {
     container.innerHTML = '';
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
-    const pageArticles = allArticles.slice(start, end);
-    
+    const pageArticles = filteredArticles.slice(start, end);
+
+    if (pageArticles.length === 0) {
+      container.innerHTML = `<p class="text-muted text-center">No articles found.</p>`;
+      return;
+    }
 
     pageArticles.forEach(article => {
       const div = document.createElement('div');
-      console.log('Rendering article:', article);
-      const preview = article.firstTextData 
-        ? article.firstTextData.slice(0, 120) 
+      const preview = article.firstTextData
+        ? article.firstTextData.slice(0, 120)
         : '';
 
       const formattedDate = new Date(article.publish_date).toLocaleDateString('en-US', {
@@ -65,7 +100,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function renderPagination() {
     paginationContainer.innerHTML = '';
-    const totalPages = Math.ceil(allArticles.length / pageSize);
+    const totalPages = Math.ceil(filteredArticles.length / pageSize);
 
     const createPageItem = (label, page, isActive = false, isDisabled = false) => {
       const li = document.createElement('li');
