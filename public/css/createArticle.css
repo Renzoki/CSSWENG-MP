@@ -25,13 +25,13 @@ body {
 
 .back-btn {
     border: none !important;
-    color: var(--secondary-color);
+    color: #cf5c80;
     font-weight: 500;
 }
 
 .back-btn:hover {
-    background-color: #f8f9fa;
-    color: var(--text-color);
+    background-color: #fce6ed;
+    color: #b74d70;
 }
 
 /* Title Block */
@@ -380,3 +380,36 @@ body {
 ::selection {
     background-color: rgba(26, 137, 23, 0.2);
 }
+
+#draftBtn {
+    background-color: transparent;
+    color: #cf5c80;
+    border: 1px solid #cf5c80;
+}
+
+#draftBtn:hover {
+    background-color: #fce6ed;
+    color: #b74d70;
+    border-color: #b74d70;
+}
+
+#confirmSaveDraft {
+    background-color: #cf5c80;
+    color: white;
+    border: none;
+}
+
+#confirmSaveDraft:hover {
+    background-color: #b74d70;
+}
+
+#publishBtn {
+    background-color: #cf5c80;
+    color: white;
+    border: none;
+}
+
+#publishBtn:hover {
+    background-color: #b74d70;
+}
+
