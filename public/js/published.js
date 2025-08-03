@@ -1,107 +1,143 @@
-const listContainer = document.querySelector("#list-items-container")
-let copyOfList
+const listContainer = document.querySelector("#list-items-container");
+const searchBar = document.querySelector("#search-bar");
+const modalContainer = document.querySelector("#modal-overlay");
+const yes = document.querySelector("#confirmation-yes");
+const no = document.querySelector("#confirmation-no");
 
-//SEARCH LOGIC
-const searchBar = document.querySelector("#search-bar")
-searchBar.addEventListener("input", (e) => {
-    if (searchBar.value) {
-        if (listContainer.dataset.version === "original") {
-            copyOfList = Array.from(listContainer.children).map(child => child.cloneNode(true));
-        }
-        listContainer.dataset.version = "copy"
-        listContainer.innerHTML = ""
+searchBar.value = "";
+let allArticles = [];
 
-        const searchResult = searchArticles(searchBar.value)
-        searchResult.forEach(item => {
-            listContainer.append(item)
-        })
+// Fetch only published
+const fetchArticles = async () => {
+    try {
+        const response = await fetch('/articles');
+        const articles = await response.json();
 
+        // Filter only published
+        allArticles = articles.filter(article =>
+            article.status === "posted" || article.status === "published"
+        );
+
+        renderArticles(allArticles);
+    } catch (err) {
+        console.error("Failed to fetch articles:", err);
+    }
+};
+
+const renderArticles = (articles) => {
+    listContainer.innerHTML = "";
+
+    articles.forEach(article => {
+        const item = document.createElement("div");
+        item.className = "list-item";
+        item.dataset.title = article.title;
+        item.dataset.publishDate = article.publish_date;
+        item.dataset.id = article._id;
+
+        const formattedDate = article.publish_date
+            ? new Date(article.publish_date).toLocaleDateString("en-US")
+            : "N/A";
+
+        item.innerHTML = `
+            <div class="date cell date-item">${formattedDate}</div>
+            <div class="article cell article-item">${article.title}</div>
+            <div class="status cell status-item">
+                <div class="status-info ${article.status}">
+                    ${article.status.charAt(0).toUpperCase() + article.status.slice(1)}
+                </div>
+            </div>
+            <div class="spacing-div cell">
+                <img class="archive-icon clickable" src="assets/archive-icon.png" alt="">
+                <img class="edit-icon clickable" src="assets/edit-icon.png" alt="">
+                <img class="delete-icon clickable" src="assets/delete-draft.png" alt="">
+            </div>
+        `;
+
+        listContainer.appendChild(item);
+    });
+
+    listContainer.dataset.version = "original";
+};
+
+// Search
+searchBar.addEventListener("input", () => {
+    const query = searchBar.value.toLowerCase();
+
+    if (query) {
+        const results = allArticles.filter(article =>
+            article.title.toLowerCase().includes(query)
+        );
+        renderArticles(results);
     } else {
-        listContainer.dataset.version = "original"
-        listContainer.innerHTML = ""
-        copyOfList.forEach(item => {
-            listContainer.append(item)
-        })
+        renderArticles(allArticles);
     }
-})
+});
 
-const searchArticles = (query) => {
-    let queriedItems = []
-    query = query.toLowerCase()
+// Modal actions
+const confirmModal = (action, article) => {
+    const actionName = document.querySelector("#action-container-span");
+    const popupArticleName = document.querySelector("#article-title-span");
 
-    copyOfList.forEach(article => {
-        title = article.querySelector(".article").textContent.toLowerCase()
-        if (title.includes(query)) {
-            queriedItems.push(article)
+    actionName.textContent = action;
+    popupArticleName.textContent = article.title;
+    modalContainer.classList.remove("hidden");
+
+    modalContainer.addEventListener("click", async (event) => {
+        if (event.target === yes) {
+            if (action === "delete") {
+                try {
+                    const res = await fetch(`/articles/${article._id}`, {
+                        method: 'DELETE'
+                    });
+                    const result = await res.json();
+                    alert(result.message);
+                    fetchArticles();
+                } catch (err) {
+                    console.error("Delete failed:", err);
+                }
+            } else if (action === "archive") {
+                try {
+                    const res = await fetch(`/articles/status/${article._id}`, {
+                        method: "PATCH",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ status: "archived" })
+                    });
+                    const result = await res.json();
+                    alert(result.message);
+                    fetchArticles();
+                } catch (err) {
+                    console.error("Archive failed:", err);
+                }
+            }
+
+            modalContainer.classList.add("hidden");
+        } else if (event.target === no || event.target === modalContainer) {
+            modalContainer.classList.add("hidden");
         }
-    })
+    }, { once: true });
+};
 
-    return queriedItems
-}
-
-// DUPLICATE, DELETE, and CONFIRMATION LOGIC
-const modalContainer = document.querySelector('#modal-overlay');
-const modalBox = document.querySelector("#modal")
-const yes = document.querySelector("#confirmation-yes")
-const no = document.querySelector("#confirmation-no")
-
+// Handle item clicks
 listContainer.addEventListener("click", (e) => {
-    if (e.target.className.includes("article-item")) { //TODO: INSERT BACKEND STUFF HERE (VIEW)
-       //view page API call
+    const item = e.target.closest(".list-item");
+    if (!item) return;
+
+    const id = item.dataset.id;
+    const article = allArticles.find(a => a._id === id);
+    if (!article) return;
+
+    if (e.target.classList.contains("delete-icon")) {
+        confirmModal("delete", article);
     }
-    else if (e.target.className.includes("archive-icon")) {
-        actionController(e, archiveItem, "archive") //confirm and archive
+
+    if (e.target.classList.contains("archive-icon")) {
+        confirmModal("archive", article);
     }
-    else if (e.target.className.includes("edit-icon")) { //TODO: INSERT BACKEND STUFF HERE (EDIT)
-       //edit page API call
+
+    if (e.target.classList.contains("edit-icon")) {
+        //TEMPORARY, IDK WHERE TO REDIRECT
+        window.location.href = `/articles/createPage/${article._id}`;
     }
-    else if (e.target.className.includes("delete-icon")) { //confirm and delete
-        actionController(e, deleteItem, "delete")
-        //delete api call
-    }
-})
+});
 
-const actionController = (e, func, action) => {
-    const element = e.target.parentNode.parentNode //get element
-    const articleTitle = element.querySelector(".article-item") //get title 
-    const actionName = document.querySelector("#action-container-span")
-    const popupArticleName = document.querySelector("#article-title-span")
-
-    actionName.textContent = action
-    popupArticleName.textContent = articleTitle.textContent //assign title to popup
-    modalContainer.classList.remove('hidden'); //show popup
-
-    modalContainer.addEventListener('click', w => {
-        if (w.target === yes) {
-            func(element)
-            modalContainer.classList.add('hidden');
-        } else if (w.target === no) {
-            modalContainer.classList.add('hidden');
-        }
-        else if (w.target === modalContainer) {
-            modalContainer.classList.add('hidden');
-        }
-    }, { once: true })
-}
-
-const archiveItem = (originalItem) => {
-    if (listContainer.dataset.version === "original") {
-        const copyOfItem = originalItem.cloneNode(true)
-        let title = copyOfItem.querySelector(".article")
-        title.textContent = `Copy of ${title.textContent.trim()}`
-        listContainer.insertBefore(copyOfItem, originalItem)
-    } else if (listContainer.dataset.version === "copy") {
-        const copyOfItem = originalItem.cloneNode(true)
-        let title = copyOfItem.querySelector(".article")
-        title.textContent = `Copy of ${title.textContent}`
-        listContainer.insertBefore(copyOfItem, originalItem)
-        copyOfList.splice(copyOfList.indexOf(originalItem) + 1, 0, copyOfItem)
-    }
-}
-
-const deleteItem = (item) => {
-    listContainer.removeChild(item)
-
-    if(listContainer.dataset.version === "copy")
-        copyOfList.splice(copyOfList.indexOf(item), 1)
-}
+document.addEventListener("DOMContentLoaded", fetchArticles);

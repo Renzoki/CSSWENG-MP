@@ -10,7 +10,7 @@ exports.createArticle = async (req, res) => {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    const validStatuses = ['posted', 'unfinished', 'finished'];
+    const validStatuses = ['published', 'unfinished', 'finished','archived'];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: 'Invalid Status Value.' });
     }
@@ -39,7 +39,7 @@ exports.updateArticle = async (req,res) =>{
         const updateData = req.body;
 
         if(updateData.status){
-            const validStatuses = ['posted', 'unfinished', 'finished'];
+            const validStatuses = ['posted', 'unfinished', 'finished','archived'];
             if(!validStatuses.includes(updateData.status)){
                 return res.status(400).json({message: 'Invalid Status Value.'});
             }
@@ -121,3 +121,102 @@ exports.getArticleById = async (req, res) => {
     return res.status(500).json({ message: 'Server error while fetching article.' });
   }
 };
+
+exports.updateStatus = async (req, res) => {
+  const { id } = req.params;
+  const { status, publish_date } = req.body;
+
+  const validStatuses = ["finished", "unfinished", "published", "archived"];
+
+  if (!validStatuses.includes(status)) {
+    return res.status(400).json({ message: "Invalid status value." });
+  }
+
+ 
+  const update = { status };
+
+  if (status === "published") {
+    update.publish_date = publish_date || new Date(); 
+  }
+
+  try {
+    const updated = await Article.findByIdAndUpdate(
+      id,
+      update, 
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: "Article not found." });
+    }
+
+    return res.status(200).json({
+      message: `Status updated to '${status}'.`,
+      article: updated
+    });
+  } catch (err) {
+    console.error("Error updating status:", err);
+    return res.status(500).json({ message: "Server error while updating status." });
+  }
+};
+
+
+exports.loadCreatePageWithArticle = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const article = await Article.findById(id);
+        if (!article) return res.status(404).send("Article not found");
+
+        res.render('createArticle', { article: JSON.stringify(article) }); // serialized into JS
+    } catch (err) {
+        console.error("Error loading article:", err);
+        res.status(500).send("Server error");
+    }
+};
+
+exports.saveDraft = async (req, res) => {
+  const { _id, title, author, content } = req.body;
+
+  if (!title || !content) {
+    return res.status(400).json({ success: false, message: "Missing title or content" });
+  }
+
+  try {
+    if (_id) {
+      const updated = await Article.findByIdAndUpdate(
+        _id,
+        {
+          title,
+          author,
+          status: "unfinished",
+          blocks: content
+        },
+        { new: true, runValidators: true }
+      );
+
+      if (!updated) {
+        return res.status(404).json({ success: false, message: "Article not found" });
+      }
+
+      return res.json({ success: true, message: "Draft updated", article: updated });
+    } else {
+      const newArticle = new Article({
+        title,
+        author,
+        status: "unfinished",
+        blocks: content,
+        publish_date: null
+      });
+
+      await newArticle.save();
+      return res.status(201).json({ success: true, message: "Draft created", article: newArticle });
+    }
+  } catch (err) {
+    console.error("Error saving draft:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+  
+
+};
+
+

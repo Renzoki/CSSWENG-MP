@@ -1,128 +1,229 @@
-const listContainer = document.querySelector("#list-items-container")
+    const listContainer = document.querySelector("#list-items-container");
+    const searchBar = document.querySelector("#search-bar");
+    const modalContainer = document.querySelector("#modal-overlay");
+    const yes = document.querySelector("#confirmation-yes");
+    const no = document.querySelector("#confirmation-no");
 
-//SEARCH LOGIC
-const searchBar = document.querySelector("#search-bar")
 
-searchBar.value = ""
-let copyOfList
+    searchBar.value = "";
 
-searchBar.addEventListener("input", (e) => {
-    if (searchBar.value) {
-        if (listContainer.dataset.version === "original") {
-            copyOfList = Array.from(listContainer.children).map(child => child.cloneNode(true));
+    let allArticles = [];
+
+    // Fetch only finished or unfinished
+    const fetchArticles = async () => {
+        try {
+            const response = await fetch('/articles');
+            const articles = await response.json();
+
+            // Filter to only "finished" or "unfinished"
+            allArticles = articles.filter(article =>
+                article.status === "finished" || article.status === "unfinished"
+            );
+
+            renderArticles(allArticles);
+        } catch (err) {
+            console.error("Failed to fetch articles:", err);
         }
-        listContainer.dataset.version = "copy"
-        listContainer.innerHTML = ""
+    };
 
-        const searchResult = searchArticles(searchBar.value)
-        searchResult.forEach(item => {
-            listContainer.append(item)
-        })
+    const renderArticles = (articles) => {
+        listContainer.innerHTML = "";
 
-    } else {
-        listContainer.dataset.version = "original"
-        listContainer.innerHTML = ""
-        copyOfList.forEach(item => {
-            listContainer.append(item)
-        })
-    }
-})
+        articles.forEach(article => {
+            const item = document.createElement("div");
+            item.className = "list-item";
+            item.dataset.title = article.title;
+            item.dataset.creationDate = article.creation_date;
+            item.dataset.id = article._id;
 
-const searchArticles = (query) => {
-    let queriedItems = []
-    query = query.toLowerCase()
+            const formattedDate = article.creation_date
+                ? new Date(article.creation_date).toLocaleDateString("en-US")
+                : "N/A";
 
-    copyOfList.forEach(article => {
-        title = article.querySelector(".article").textContent.toLowerCase()
-        if (title.includes(query)) {
-            queriedItems.push(article)
+            item.innerHTML = `
+                <div class="date cell date-item">${formattedDate}</div>
+                <div class="article cell article-item">
+                    <a href="/articles/createPage/${article._id}" class="title-link">${article.title}</a>
+                </div>
+                <div class="status cell status-item">
+                    <div class="status-info ${article.status}">
+                        ${article.status.charAt(0).toUpperCase() + article.status.slice(1)}
+                    </div>
+                </div>
+                <div class="spacing-div cell">
+                    <img class="duplicate-icon clickable" src="assets/duplicate-draft.png" alt="">
+                    <img class="delete-icon clickable" src="assets/delete-draft.png" alt="">
+                </div>
+            `;
+
+            listContainer.appendChild(item);
+        });
+
+        listContainer.dataset.version = "original";
+    };
+
+    // Search logic
+    searchBar.addEventListener("input", () => {
+        const query = searchBar.value.toLowerCase();
+
+        if (query) {
+            const results = allArticles.filter(article =>
+                article.title.toLowerCase().includes(query)
+            );
+            renderArticles(results);
+        } else {
+            renderArticles(allArticles);
         }
-    })
+    });
 
-    return queriedItems
-}
+    // Modal confirmation for delete or duplicate
+    const confirmModal = (action, article) => {
+        const actionName = document.querySelector("#action-container-span");
+        const popupArticleName = document.querySelector("#article-title-span");
 
-// DUPLICATE, DELETE, and CONFIRMATION LOGIC
-const modalContainer = document.querySelector('#modal-overlay');
-const modalBox = document.querySelector("#modal")
-const yes = document.querySelector("#confirmation-yes")
-const no = document.querySelector("#confirmation-no")
+        actionName.textContent = action;
+        popupArticleName.textContent = article.title;
+        modalContainer.classList.remove("hidden");
 
-listContainer.addEventListener("click", (e) => {
-    if (e.target.className.includes("duplicate-icon")) {
-        actionController(e, duplicateItem, "duplicate") //confirm and duplicate
-    }
+        modalContainer.addEventListener("click", async (event) => {
+            if (event.target === yes) {
+                if (action === "delete") {
+                    try {
+                        const res = await fetch(`/articles/${article._id}`, {
+                            method: 'DELETE'
+                        });
 
-    if (e.target.className.includes("delete-icon")) { //confirm and delete
-        actionController(e, deleteItem, "delete")
-    }
-})
+                        const result = await res.json();
+                        alert(result.message);
+                        fetchArticles();
+                    } catch (err) {
+                        console.error("Delete failed:", err);
+                    }
+                } else if (action === "duplicate") {
+                    const { _id, __v, creation_date, ...copyData } = article;
+                    copyData.title = `Copy of ${article.title}`;
+                    try {
+                        const res = await fetch('/articles', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(copyData)
+                        });
+                        const result = await res.json();
+                        if (res.ok) alert("Successfully duplicated article!");
+                        fetchArticles();
+                    } catch (err) {
+                        console.error("Duplicate failed:", err);
+                    }
+                }
 
-const actionController = (e, func, action) => {
-    const element = e.target.parentNode.parentNode //get element
-    const articleTitle = element.querySelector(".article-item") //get title 
-    const actionName = document.querySelector("#action-container-span")
-    const popupArticleName = document.querySelector("#article-title-span")
+                modalContainer.classList.add("hidden");
+            } else if (event.target === no || event.target === modalContainer) {
+                modalContainer.classList.add("hidden");
+            }
+        }, { once: true });
+    };
 
-    actionName.textContent = action
-    popupArticleName.textContent = articleTitle.textContent //assign title to popup
-    modalContainer.classList.remove('hidden'); //show popup
+    // Handle clicks on list items
+    listContainer.addEventListener("click", async(e) => {
+        const item = e.target.closest(".list-item");
+        if (!item) return;
 
-    modalContainer.addEventListener('click', w => {
-        if (w.target === yes) {
-            console.log("blue")
-            func(element)
-            modalContainer.classList.add('hidden');
-        } else if (w.target === no) {
-            modalContainer.classList.add('hidden');
+        const title = item.dataset.title;
+        const creation_date = item.dataset.creationDate;
+
+        const article = allArticles.find(
+            a => a.title === title && a.creation_date === creation_date
+        );
+        if (!article) return;
+
+        if (e.target.classList.contains("delete-icon")) {
+            confirmModal("delete", article);
         }
-        else if (w.target === modalContainer) {
-            modalContainer.classList.add('hidden');
+
+        if (e.target.classList.contains("duplicate-icon")) {
+            confirmModal("duplicate", article);
         }
-    }, { once: true })
-}
 
-const duplicateItem = (originalItem) => {
-    if (listContainer.dataset.version === "original") {
-        const copyOfItem = originalItem.cloneNode(true)
-        let title = copyOfItem.querySelector(".article")
-        title.textContent = `Copy of ${title.textContent.trim()}`
-        listContainer.insertBefore(copyOfItem, originalItem)
-    } else if (listContainer.dataset.version === "copy") {
-        const copyOfItem = originalItem.cloneNode(true)
-        let title = copyOfItem.querySelector(".article")
-        title.textContent = `Copy of ${title.textContent}`
-        listContainer.insertBefore(copyOfItem, originalItem)
-        copyOfList.splice(copyOfList.indexOf(originalItem) + 1, 0, copyOfItem)
-    }
-}
+        if (e.target.classList.contains("status-info")) {
+        const status = e.target;
+        const item = status.closest(".list-item");
+        const id = item.dataset.id;
 
-const deleteItem = (item) => {
-    listContainer.removeChild(item)
+        const newStatus = status.classList.contains("finished") ? "unfinished" : "finished";
 
-    if (listContainer.dataset.version === "copy")
-        copyOfList.splice(copyOfList.indexOf(item), 1)
-}
+        try {
+            const res = await fetch(`/articles/status/${id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ status: newStatus })
+            });
 
-// CHANGING STATUS LOGIC
-listContainer.addEventListener("click", (e) => {
-    const element = e.target
+            const result = await res.json();
 
-    if (element.className.includes("status-info")) {
-        changeStatus(element)
-    }
-})
+            if (res.ok) {
+                // Update badge UI
+                status.classList.remove("finished", "unfinished");
+                status.classList.add(newStatus);
+                status.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+                status.style.backgroundColor = newStatus === "finished" ? "#52914E" : "#CD3546";
 
-const changeStatus = (status) => {
-    console.log(status.classList)
-    if (status.classList.contains("finished")) {
-        status.style.backgroundColor = "#CD3546"
-        status.textContent = "Unfinished"
-        status.classList.replace("finished", "unfinished")
-    } else if (status.classList.contains("unfinished")) {
-        status.style.backgroundColor = "#52914E"
-        status.textContent = "Finished"
-        status.classList.replace("unfinished", "finished")
-    }
-    console.log(status.classList)
-}
+                // Show confirmation alert
+                alert(`Status changed to ${newStatus}`);
+            } else {
+                alert(result.message || "Failed to update status.");
+            }
+        } catch (err) {
+            console.error("Failed to update status:", err);
+            alert("Error updating status.");
+        }
+        }
+    });
+
+    //Add new article button
+    document.addEventListener("click", async(e) => {
+        if(e.target.id === "add-new-article-button"){
+        try{
+            const res = await fetch('/articles',{ 
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                title: "New Article",
+                status: "unfinished",
+                author: null,
+                blocks: [
+                    {
+                        type: "text",
+                        data: "",
+                        order: 0
+                    }
+                ]
+                })
+            });
+
+            const result = await res.json();
+            alert(result.message || "Article created!");
+            allArticles.push(result);
+
+            // Sort list by creation_date DESC
+            allArticles.sort((a, b) =>
+                new Date(b.creation_date) - new Date(a.creation_date)
+            );
+            renderArticles(allArticles);
+
+             if(res.ok){
+                setTimeout(() => {
+                    window.location.href = `/articles/createPage/${result._id}`;
+                }, 500); 
+            }
+            
+            
+        }catch (err){
+            console.error("Failed to create article:", err);
+            alert("Error creating article.");
+        }
+        }
+    });
+
+
+    // Initial load
+    document.addEventListener("DOMContentLoaded", fetchArticles);

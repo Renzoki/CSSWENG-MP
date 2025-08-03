@@ -34,18 +34,21 @@ exports.logout = (req, res) => {
     req.session.destroy(err => {
         if (err) {
             console.error("Logout error: ", err);
-            return res.status(500).json({ message: "Logout failed" });
+            return res.redirect('/admin/?message=' + encodeURIComponent("Logout failed, please try again"));
         }
         res.clearCookie('connect.sid');
-        return res.status(200).json({ message: "Logged out successfully", redirect: "/" });
+        return res.redirect('/admin/?message=' + encodeURIComponent("Logged out successfully"));
     });
 };
 
+
+
 exports.isAuthenticated = (req, res, next) => {
     if (req.session.userId) {
+        res.set('Cache-Control', 'no-store');
         return next();
     } else {
-        return res.redirect('/?message=' + encodeURIComponent("Please log in first"));
+        return res.redirect('/admin?message=' + encodeURIComponent("Please log in first"));
     }
 };
 
@@ -89,3 +92,25 @@ exports.forgot_password = async (req,res) => {
 
     }
 };
+
+exports.change_password = async(req,res) => {
+    const {newPassword } = req.body
+    
+    try{
+        const user = await User.findById(req.session.userId);
+        if(!user){
+            return res.status(404).json({error: 'Email not found'})
+        }
+
+        user.password = newPassword;
+        await user.save()
+
+        res.json({ message: "Password changed successfully!"});
+
+
+    }catch(err){
+        console.error(err);
+        res.status(500).json({ error: 'Password change failed!'});
+    }
+
+}

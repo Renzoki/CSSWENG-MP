@@ -5,18 +5,20 @@ const path = require('path')
 const authRoutes = require('./routes/authRoutes')
 const articleRoutes = require('./routes/articleRoutes')
 const authController = require('./controllers/authController')
+const uploadRoutes = require('./routes/uploadRoutes');
 const connectDB = require('./config/connect')
 
 
 const PORT = process.env.PORT || 3000
 
 //Connect to db
-// connectDB();
+connectDB();
 
 // Templates and Static Files
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'templates'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static('public/uploads'));  // serve files
 
 //Middleware
 const session = require('express-session')
@@ -33,8 +35,9 @@ app.use(session({ //establishing a session
 
 
 //Routes
-app.use('/',authRoutes)
+app.use('/admin',authRoutes)
 app.use('/articles',articleRoutes)
+app.use('/uploads', uploadRoutes);                    
 
 app.get("/forgot", (req, res) => {
     res.render("ADMIN/forgot")
@@ -44,33 +47,28 @@ app.get("/drafts",authController.isAuthenticated, (req, res) => {
     res.render("ADMIN/drafts")
 })
 
-app.get("/view", (req, res) => {
+app.get("/view",authController.isAuthenticated, (req, res) => {
     res.render("ADMIN/view")
 })
 
-app.get("/published", (req, res) => {
+app.get("/published",authController.isAuthenticated, (req, res) => {
     res.render("ADMIN/published")
 })
 
-app.get("/users", (req, res) => {
+app.get("/users",authController.isAuthenticated, (req, res) => {
     res.render("ADMIN/users")
 })
 
-app.get("/account", (req, res) => {
+app.get("/account",authController.isAuthenticated, (req, res) => {
     res.render("ADMIN/account")
 })
 
-app.get("/create", (req, res) => {
+app.get("/create",authController.isAuthenticated, (req, res) => {
     res.render("ADMIN/create")
 })
 
-
-app.get("/post", (req, res) => {
+app.get("/post",authController.isAuthenticated, (req, res) => {
   res.render("ADMIN/post");
-});
-
-app.get("/view", (req, res) => {
-  res.render("ADMIN/view");
 });
 
 //FOR TESTING MAIN WEB PAGES ONLY 

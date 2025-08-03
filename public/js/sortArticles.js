@@ -3,7 +3,7 @@ const sortByDate = document.querySelector(".sort-date")
 const sortByTitle = document.querySelector(".sort-title")
 
 sortByDate.addEventListener("click", (e) => {
-    let list = Array.from(document.querySelectorAll(".list-item")) //#1 get the list
+    let list = Array.from(document.querySelectorAll(".list-item")) 
     listContainer.innerHTML = ""
     sortDates(list)
 
@@ -16,11 +16,11 @@ sortByDate.addEventListener("click", (e) => {
         sortByDate.setAttribute("src", "assets/arrow-upward.png")
     }
 
-    list.forEach(item => listContainer.append(item))               //#4 put the sorted list back
+    list.forEach(item => listContainer.append(item))              
 })
 
 sortByTitle.addEventListener("click", (e) => {
-    let list = Array.from(document.querySelectorAll(".list-item")) //#1 get the list
+    let list = Array.from(document.querySelectorAll(".list-item"))
     listContainer.innerHTML = ""
     list.forEach(item => console.log(item.querySelector(".article").textContent + "\n ==========="))
     sortTitles(list)
@@ -36,14 +36,14 @@ sortByTitle.addEventListener("click", (e) => {
         sortByTitle.setAttribute("src", "assets/arrow-upward.png")
     }
 
-    list.forEach(item => listContainer.append(item))               //#4 put the sorted list back
+    list.forEach(item => listContainer.append(item))              
 })
 
-try { //does nothing when called by views page (doesn't have a status column)
+try { //does nothing when called by published page (doesn't have a status column)
     const sortByStatus = document.querySelector(".sort-status")
 
     sortByStatus.addEventListener("click", (e) => {
-        let list = Array.from(document.querySelectorAll(".list-item")) //#1 get the list
+        let list = Array.from(document.querySelectorAll(".list-item"))
         listContainer.innerHTML = ""
         sortStatuses(list)
 
@@ -56,7 +56,7 @@ try { //does nothing when called by views page (doesn't have a status column)
             sortByStatus.setAttribute("src", "assets/arrow-upward.png")
         }
 
-        list.forEach(item => listContainer.append(item))               //#4 put the sorted list back
+        list.forEach(item => listContainer.append(item))             
     })
 
 

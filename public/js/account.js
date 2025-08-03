@@ -21,9 +21,29 @@ const popUpConfirmation = () => {
     const no = document.querySelector(".no")
 
     modalContainer.classList.remove('hidden');
-    modalContainer.addEventListener('click', w => {
+    const newPassword = form.newPassword.value;
+
+    modalContainer.addEventListener('click', async w => {
         if (w.target === yes) {
             //TODO: Insert API call here
+            try{
+                const res = await fetch(`/admin/change_password`,{
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({newPassword})
+                });
+
+                const result = await res.json()
+                if(res.ok){
+                    alert(result.message);
+                }else{
+                    alert(result.error || "Something went wrong");
+                }
+
+            }catch(err){
+                console.error("Change password failed: ", err)
+            }
+
             modalContainer.classList.add('hidden');
         } else if (w.target === no) {
             modalContainer.classList.add('hidden');
