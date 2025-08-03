@@ -18,6 +18,7 @@ connectDB();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'templates'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static('public/uploads'));  // serve files
 
 //Middleware
 const session = require('express-session')
@@ -36,7 +37,6 @@ app.use(session({ //establishing a session
 //Routes
 app.use('/admin',authRoutes)
 app.use('/articles',articleRoutes)
-app.use('/uploads', express.static('public/uploads'));  // serve files
 app.use('/uploads', uploadRoutes);                    
 
 app.get("/forgot", (req, res) => {
@@ -70,7 +70,6 @@ app.get("/create",authController.isAuthenticated, (req, res) => {
 app.get("/post",authController.isAuthenticated, (req, res) => {
   res.render("post");
 });
-
 
 
 
