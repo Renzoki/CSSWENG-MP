@@ -6,6 +6,7 @@ const authRoutes = require('./routes/authRoutes')
 const articleRoutes = require('./routes/articleRoutes')
 const authController = require('./controllers/authController')
 const uploadRoutes = require('./routes/uploadRoutes');
+const mainWebRoutes = require('./routes/mainWebRoutes');
 const connectDB = require('./config/connect')
 const webRoutes = require('./routes/webRoutes');
 
@@ -40,8 +41,15 @@ app.use(session({ //establishing a session
 //Routes
 app.use('/admin',authRoutes)
 app.use('/articles',articleRoutes)
+<<<<<<< Updated upstream
 app.use('/uploads', uploadRoutes);
 app.use('/web', webRoutes);                    
+=======
+app.use('/uploads', uploadRoutes);     
+app.use('/mainWeb', mainWebRoutes);  
+
+app.use('/', mainWebRoutes);
+>>>>>>> Stashed changes
 
 app.get("/forgot", (req, res) => {
     res.render("ADMIN/forgot")
@@ -107,5 +115,7 @@ app.get("/News", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
 })
+
+
 
 

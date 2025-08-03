@@ -71,6 +71,25 @@ p {
     overflow: hidden;
 }
 
+.article-image {
+  width: 220px;           /* fixed width */
+  height: 154px;          /* fixed height */
+  object-fit: cover;      /* crop if too big */
+  object-position: center;
+  display: block;
+  background-color: #f0f0f0; /* fallback bg if image is tiny or missing */
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.article-image:before {
+  content: "";
+  display: block;
+  width: 220px;
+  height: 154px;
+  background: #ccc url('/assets/photo_unavailable.jpg') center/cover no-repeat;
+}
+
 #carouselExampleSlidesOnly .carousel-inner,
 #carouselExampleSlidesOnly .carousel-item {
     height: 100%;

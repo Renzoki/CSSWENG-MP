@@ -10,7 +10,7 @@
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   <title>Title</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="css/main-style.css">
+  <link rel="stylesheet" href="/css/main-style.css">
 </head>
 
 <body>
@@ -19,34 +19,34 @@
 
 
 
-    <!-- Format. Delete when putting backend Logic -->
     <div class="container mt-5 pt-5">
-      <div class="row justify-content-center">
-        <div class="col-md-8">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
 
-          <!-- Article Title -->
-          <h1 class="fw-bold">Amazing Performance</h1>
-          <p class="text-muted">By Ivan Boado • 2 days ago</p>
+      <!-- Title and Author -->
+      <h1 class="fw-bold"><%= article.title %></h1>
+      <p class="text-muted">
+        By <%- article.author %> • 
+        <%- article.publish_date 
+              ? new Date(article.publish_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) 
+              : 'Unpublished' 
+        %>
+      </p>
 
-          <!-- Article Content -->
-          <p class="fs-5">
-            The students of Little Flowers Academy amazed the audience of RCBC Makati theater of their take on pinnochio
-            last August 10, 2025.
-          </p>
-          <p class="fs-5">
-            nothing beats a jet2 holiday and right now you can save £50 per person. that's £200 off for a family of 4.
-            we've got millions of free child place holidays available with 22kg of baggage included. book now with
-            jet2holidays. package holidays you can trust!
-          </p>
-
-          <!-- Centered Image aligned with text width -->
+      <!-- Render article blocks -->
+      <% article.blocks.forEach(block => { %>
+        <% if (block.type === 'text') { %>
+          <p class="fs-5"><%- block.data %></p>
+        <% } else if (block.type === 'image') { %>
           <div class="text-center my-4">
-            <img src="assets/sample3.jpg" alt="Photo" class="img-fluid rounded w-100" />
+            <img src="<%= block.data %>" alt="Article Image" class="img-fluid rounded w-100" onerror="this.onerror=null; this.src='/assets/photo_unavailable.jpg';"/>
           </div>
+        <% } %>
+      <% }); %>
 
-        </div>
-      </div>
     </div>
+  </div>
+</div>
 
 
 
