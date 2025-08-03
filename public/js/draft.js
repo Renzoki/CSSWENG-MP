@@ -43,7 +43,7 @@
             item.innerHTML = `
                 <div class="date cell date-item">${formattedDate}</div>
                 <div class="article cell article-item">
-                    <a href="/articles/createPage/${article._id}" class="title-link">${article.title}</a>
+                    <a href="/articles/editArticle/${article._id}" class="title-link">${article.title}</a>
                 </div>
                 <div class="status cell status-item">
                     <div class="status-info ${article.status}">

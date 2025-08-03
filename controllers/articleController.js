@@ -167,7 +167,7 @@ exports.loadCreatePageWithArticle = async (req, res) => {
         const article = await Article.findById(id);
         if (!article) return res.status(404).send("Article not found");
 
-        res.render('createArticle', { article: JSON.stringify(article) }); // serialized into JS
+        res.render('admin/createArticle', { article: JSON.stringify(article) }); // serialized into JS
     } catch (err) {
         console.error("Error loading article:", err);
         res.status(500).send("Server error");

@@ -10,7 +10,7 @@ router.patch('/:id', authController.isAuthenticated, articleController.updateArt
 router.delete('/:id', authController.isAuthenticated, articleController.deleteArticle);
 router.patch('/status/:id', authController.isAuthenticated, articleController.updateStatus);
 router.post('/saveDraft', authController.isAuthenticated, articleController.saveDraft);
-router.get('/createPage/:id', authController.isAuthenticated, articleController.loadCreatePageWithArticle);
+router.get('/editArticle/:id', authController.isAuthenticated, articleController.loadCreatePageWithArticle);
 
 module.exports = router;
 
