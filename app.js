@@ -37,40 +37,40 @@ app.use('/',authRoutes)
 app.use('/articles',articleRoutes)
 
 app.get("/forgot", (req, res) => {
-    res.render("forgot")
+    res.render("ADMIN/forgot")
 })
 
 app.get("/drafts",authController.isAuthenticated, (req, res) => {
-    res.render("drafts")
+    res.render("ADMIN/drafts")
 })
 
 app.get("/view", (req, res) => {
-    res.render("view")
+    res.render("ADMIN/view")
 })
 
 app.get("/published", (req, res) => {
-    res.render("published")
+    res.render("ADMIN/published")
 })
 
 app.get("/users", (req, res) => {
-    res.render("users")
+    res.render("ADMIN/users")
 })
 
 app.get("/account", (req, res) => {
-    res.render("account")
+    res.render("ADMIN/account")
 })
 
 app.get("/create", (req, res) => {
-    res.render("create")
+    res.render("ADMIN/create")
 })
 
 
 app.get("/post", (req, res) => {
-  res.render("post");
+  res.render("ADMIN/post");
 });
 
 app.get("/view", (req, res) => {
-  res.render("view");
+  res.render("ADMIN/view");
 });
 
 
@@ -78,3 +78,31 @@ app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
 })
 
+//FOR TESTING MAIN WEB PAGES ONLY 
+app.get("/AboutUs", (req, res) => {
+  res.render("Main/AboutUs");
+});
+
+app.get("/ArticlePage", (req, res) => {
+  res.render("Main/ArticlePage");
+});
+
+app.get("/Dance", (req, res) => {
+  res.render("Main/Dance");
+});
+
+app.get("/Faculty", (req, res) => {
+  res.render("Main/Faculty");
+});
+
+app.get("/index", (req, res) => {
+  res.render("Main/index");
+});
+
+app.get("/Music", (req, res) => {
+  res.render("Main/Music");
+});
+
+app.get("/News", (req, res) => {
+  res.render("Main/News");
+});
